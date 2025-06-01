@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Santaan/Skids Diet Planner powered by AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.1.3/24/outline/magnifying-glass.svg" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.1.3/24/outline/exclamation-triangle.svg" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.1.3/24/solid/fire.svg" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.1.3/24/outline/photo.svg" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.1.3/24/solid/x-circle.svg" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.1.3/24/outline/calendar-days.svg" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.1.3/24/outline/user-group.svg" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.1.3/24/outline/document-text.svg" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.1.3/24/solid/light-bulb.svg" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.1.3/24/solid/clipboard-document-check.svg" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.1.3/24/outline/arrow-down-tray.svg" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.1.3/24/outline/star.svg" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.1.3/24/solid/star.svg" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.1.3/24/outline/check-circle.svg" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.1.3/24/solid/check-circle.svg" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.1.3/24/outline/academic-cap.svg" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.1.3/24/outline/cog-6-tooth.svg" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="https://unpkg.com/netlify-identity-widget@1/build/netlify-identity.css">
+
+
+<script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://esm.sh/@google/genai@^1.2.0",
+    "react": "https://esm.sh/react@^19.1.0",
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/"
+  }
+}
+</script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  :root {
+    --color-primary: #10B981; /* Default Green */
+    --color-primary-hover: #059669;
+    --color-primary-text: #ffffff;
+    --color-accent: #3B82F6; /* Default Blue */
+    --color-accent-hover: #2563EB;
+    --color-accent-text: #ffffff;
+    --color-header-bg: #ffffff;
+    --color-header-text: #374151;
+    --color-button-secondary-bg: #ffffff;
+    --color-button-secondary-text: #3B82F6;
+    --color-button-secondary-hover-bg: #EFF6FF;
+    --developer-credit-color: #E5E7EB; /* Light gray for superscript */
+  }
+  body {
+    font-family: 'Inter', sans-serif; /* A common sans-serif font */
+  }
+
+  .developer-credit {
+    font-size: 0.7em;
+    color: var(--developer-credit-color); /* Slightly dimmer */
+    vertical-align: super;
+    margin-left: 4px;
+  }
+  .tailwind-primary-button {
+    background-color: var(--color-primary);
+    color: var(--color-primary-text);
+  }
+  .tailwind-primary-button:hover {
+    background-color: var(--color-primary-hover);
+  }
+   .tailwind-accent-button {
+    background-color: var(--color-accent);
+    color: var(--color-accent-text);
+  }
+  .tailwind-accent-button:hover {
+    background-color: var(--color-accent-hover);
+  }
+  .tailwind-secondary-button {
+    background-color: var(--color-button-secondary-bg);
+    color: var(--color-button-secondary-text);
+  }
+  .tailwind-secondary-button:hover {
+     background-color: var(--color-button-secondary-hover-bg);
+  }
+</style>
+</head>
+<body class="bg-gradient-to-br from-green-400 via-teal-400 to-blue-500 min-h-screen flex flex-col items-center justify-center p-4 font-sans">
+  <div id="root" class="w-full max-w-4xl"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html><link rel="stylesheet" href="index.css">
+<script src="index.tsx" type="module"></script>

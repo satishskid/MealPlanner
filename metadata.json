@@ -1,0 +1,5 @@
+{
+  "name": "Food Calorie Checker",
+  "description": "An application to check the estimated calorie content and nutritional information of food items using Gemini API.",
+  "requestFramePermissions": []
+}
