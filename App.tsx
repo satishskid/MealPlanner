@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
+import netlifyIdentity, { User } from 'netlify-identity-widget';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import FoodInput from './components/FoodInput';
@@ -15,12 +16,13 @@ import SettingsPanel from './components/SettingsPanel'; // Ensured relative path
 import { 
   CalorieInfo, GroundingMetadata, AppMode, UserProfile, DailyFoodLog, 
   DailyMealAnalysis, MealPlan, NutritionistViewData, AdherenceLog, DailyAdherence,
-  AppSettings, ThemeOption, DoctorProfile
+  AppSettings /*ThemeOption, DoctorProfile*/
 } from './types';
 import { fetchCalorieInfo, analyzeDailyIntake, suggestMealPlans } from './services/geminiService';
 import { 
     API_KEY_CHECK_MSG, API_KEY_MISSING_MSG, API_KEY_PRESENT_MSG, 
-    DEFAULT_SETTINGS, LOCAL_STORAGE_SETTINGS_KEY, THEME_OPTIONS
+    DEFAULT_SETTINGS, LOCAL_STORAGE_SETTINGS_KEY, THEME_OPTIONS,
+    APP_TITLE // Import APP_TITLE
 } from './constants';
 
 const fileToBase64 = (file: File): Promise<string> => {
@@ -44,6 +46,7 @@ interface SingleFoodSearchPayload {
 }
 
 const App: React.FC = () => {
+  const [user, setUser] = useState<User | null>(null);
   const [apiKeyStatus, setApiKeyStatus] = useState<string>(API_KEY_CHECK_MSG);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -107,6 +110,73 @@ const App: React.FC = () => {
       setError(API_KEY_MISSING_MSG); 
     }
   }, [applyTheme]);
+
+  useEffect(() => {
+    netlifyIdentity.init({});
+    const currentUser = netlifyIdentity.currentUser();
+    if (currentUser) {
+      setUser(currentUser);
+    }
+
+    const handleLoginInternal = (loggedInUser: User) => {
+      setUser(loggedInUser);
+      netlifyIdentity.close(); // Close the modal on login
+    };
+
+    const handleLogoutInternal = () => {
+      setUser(null);
+      // Reset app state on logout
+      setUserProfile(null); 
+      setDailyFoodLog(null);
+      setDailyMealAnalysis(null);
+      setSuggestedMealPlans(null);
+      setSelectedMealPlan(null);
+      setAdherenceLog({});
+      setAppMode('dailyPlanner'); // Reset to default mode or last mode
+      setError(null);
+    };
+
+    netlifyIdentity.on('login', handleLoginInternal);
+    netlifyIdentity.on('logout', handleLogoutInternal);
+
+    // Initial check for API key when component mounts, independent of user state
+    if (process.env.API_KEY) {
+      setApiKeyStatus(API_KEY_PRESENT_MSG);
+    } else {
+      setApiKeyStatus(API_KEY_MISSING_MSG);
+      // Set an error only if no API key, this is a general app state, not tied to user login yet
+      setError(API_KEY_MISSING_MSG);
+    }
+
+    return () => {
+      netlifyIdentity.off('login', handleLoginInternal);
+      netlifyIdentity.off('logout', handleLogoutInternal);
+    };
+  }, []); // Empty dependency array means this runs once on mount and cleanup on unmount
+
+  // Effect to manage API key related error message based on user presence
+  useEffect(() => {
+    if (user && !process.env.API_KEY) {
+        setError(API_KEY_MISSING_MSG);
+    } else if (user && process.env.API_KEY && error === API_KEY_MISSING_MSG) {
+        // Clear API key error if user is logged in and key becomes available
+        setError(null);
+    } else if (!user && error === API_KEY_MISSING_MSG) {
+        // If user logs out, the API key missing message might persist if it was set initially.
+        // This ensures it's still shown if relevant, or cleared if not.
+        // setError(null); // Or keep it if you want to always show it when no key, regardless of login
+    }
+  }, [user, error, apiKeyStatus]); // Re-run if user, error, or apiKeyStatus changes
+
+
+
+  const openAuthModal = () => {
+    netlifyIdentity.open(); // Opens the Netlify Identity modal for login/signup
+  };
+
+  const handleLogoutClick = () => {
+    netlifyIdentity.logout();
+  };
 
   const handleSaveSettings = (newSettings: AppSettings) => {
     // Ensure API key display is always from env, not user input affecting this specific display
@@ -262,9 +332,41 @@ const App: React.FC = () => {
     setPatientCondition('');
   };
 
+  if (!user) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[var(--color-primary-bg-subtle)] via-[var(--color-secondary-bg-subtle)] to-[var(--color-accent-bg-subtle)] p-4">
+        {error && error !== API_KEY_MISSING_MSG && <ErrorDisplay message={error} />}
+        {apiKeyStatus === API_KEY_MISSING_MSG && (
+            <div className="fixed top-4 left-1/2 transform -translate-x-1/2 w-11/12 max-w-md p-3 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-md shadow-lg z-50">
+                <p className="font-bold">API Key Missing!</p>
+                <p>{API_KEY_MISSING_MSG}</p>
+                <p className="text-xs mt-1">Some features will be disabled. Please set it up in settings or environment variables.</p>
+            </div>
+        )}
+        <div className="bg-[var(--color-background)] p-8 rounded-lg shadow-xl text-center max-w-md w-full">
+          <div className="inline-flex items-center bg-[var(--color-header-bg)] p-3 sm:p-4 rounded-lg shadow-lg mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="var(--color-primary)" className="w-10 h-10 sm:w-12 sm:h-12 mr-3 sm:mr-4">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 9.75 CeresStyle.RangeSlider.ThumbContainerStyle 6.75a2.25 2.25 0 00-2.25-2.25H4.5A2.25 2.25 0 002.25 6.75v10.5A2.25 2.25 0 004.5 19.5h15a2.25 2.25 0 002.25-2.25V9.75z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 9.75H4.5M16.5 4.5V8.25M8.25 4.5V8.25M12 13.5h.008v.008H12v-.008zm0 3h.008v.008H12v-.008zm0 3h.008v.008H12v-.008zm3-6h.008v.008H15v-.008zm0 3h.008v.008H15v-.008zm0 3h.008v.008H15v-.008zm3-6h.008v.008H18v-.008zm0 3h.008v.008H18v-.008zm0 3h.008v.008H18v-.008zM4.5 13.5H9m-4.5 3H9m-4.5 3H9" />
+            </svg>
+            <h1 className="text-2xl sm:text-3xl font-bold text-[var(--color-header-text)]">{APP_TITLE}</h1>
+          </div>
+          <p className="mb-8 text-[var(--color-text-secondary)]">Please log in or sign up to continue.</p>
+          <button
+            onClick={openAuthModal}
+            className="w-full px-6 py-3 tailwind-primary-button text-white font-semibold rounded-lg shadow-md hover:bg-[var(--color-primary-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-opacity-50 transition duration-150 ease-in-out"
+          >
+            Login / Sign Up
+          </button>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto px-2 sm:px-4 py-8 min-h-screen flex flex-col bg-gray-50 rounded-xl shadow-2xl">
-      <Header clinicName={appSettings.clinicName} onToggleSettings={() => setShowSettingsPanel(true)} />
+      <Header clinicName={appSettings.clinicName} onToggleSettings={() => setShowSettingsPanel(true)} userEmail={user?.email} onLogout={handleLogoutClick} />
       
       {showSettingsPanel && (
         <SettingsPanel
