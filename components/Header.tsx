@@ -1,31 +1,16 @@
+
 import React from 'react';
 import { APP_TITLE, POWERED_BY_AI, DEVELOPER_CREDIT } from '../constants';
 
 interface HeaderProps {
   clinicName?: string;
   onToggleSettings: () => void;
-  userEmail?: string; // Optional: To display user info
-  onLogout?: () => void; // Optional: To handle logout
 }
 
-const Header: React.FC<HeaderProps> = ({ clinicName, onToggleSettings, userEmail, onLogout }) => {
+const Header: React.FC<HeaderProps> = ({ clinicName, onToggleSettings }) => {
   return (
     <header className="mb-6 sm:mb-8 text-center relative">
       <div className="inline-flex items-center bg-[var(--color-header-bg)] p-3 sm:p-4 rounded-lg shadow-xl relative">
-        {userEmail && (
-          <span className="text-sm text-gray-600 hidden sm:inline mr-3 sm:mr-4">{userEmail}</span>
-        )}
-        {onLogout && (
-          <button 
-            onClick={onLogout}
-            title="Logout"
-            className="p-2 rounded-md hover:bg-gray-200 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 mr-3 sm:mr-4"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-red-600">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
-            </svg>
-          </button>
-        )}
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="var(--color-primary)" className="w-10 h-10 sm:w-12 sm:h-12 mr-3 sm:mr-4">
           <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 9.75 CeresStyle.RangeSlider.ThumbContainerStyle 6.75a2.25 2.25 0 00-2.25-2.25H4.5A2.25 2.25 0 002.25 6.75v10.5A2.25 2.25 0 004.5 19.5h15a2.25 2.25 0 002.25-2.25V9.75z" />
           <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 9.75H4.5M16.5 4.5V8.25M8.25 4.5V8.25M12 13.5h.008v.008H12v-.008zm0 3h.008v.008H12v-.008zm0 3h.008v.008H12v-.008zm3-6h.008v.008H15v-.008zm0 3h.008v.008H15v-.008zm0 3h.008v.008H15v-.008zm3-6h.008v.008H18v-.008zm0 3h.008v.008H18v-.008zm0 3h.008v.008H18v-.008zM4.5 13.5H9m-4.5 3H9m-4.5 3H9" />

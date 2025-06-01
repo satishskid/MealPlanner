@@ -1,5 +1,5 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
-import netlifyIdentity, { User } from 'netlify-identity-widget';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import FoodInput from './components/FoodInput';
@@ -44,7 +44,6 @@ interface SingleFoodSearchPayload {
 }
 
 const App: React.FC = () => {
-  const [user, setUser] = useState<User | null>(null);
   const [apiKeyStatus, setApiKeyStatus] = useState<string>(API_KEY_CHECK_MSG);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -71,38 +70,6 @@ const App: React.FC = () => {
   const [appSettings, setAppSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
   const [showSettingsPanel, setShowSettingsPanel] = useState<boolean>(false);
 
-  useEffect(() => {
-    netlifyIdentity.init({});
-    const currentUser = netlifyIdentity.currentUser();
-    if (currentUser) {
-      setUser(currentUser);
-    }
-
-    const handleLogin = (loggedInUser: User) => {
-      setUser(loggedInUser);
-      netlifyIdentity.close();
-    };
-
-    const handleLogout = () => {
-      setUser(null);
-    };
-
-    netlifyIdentity.on('login', handleLogin);
-    netlifyIdentity.on('logout', handleLogout);
-
-    // Initial API Key check (moved here to ensure it runs after identity check)
-    if (process.env.API_KEY) {
-      setApiKeyStatus(API_KEY_PRESENT_MSG);
-    } else {
-      setApiKeyStatus(API_KEY_MISSING_MSG);
-      // setError(API_KEY_MISSING_MSG); // Only set error if user is logged in and key is missing
-    }
-
-    return () => {
-      netlifyIdentity.off('login', handleLogin);
-      netlifyIdentity.off('logout', handleLogout);
-    };
-  }, []);
 
   const applyTheme = useCallback((themeName: string) => {
     const theme = THEME_OPTIONS.find(t => t.name === themeName) || THEME_OPTIONS[0];
@@ -140,15 +107,6 @@ const App: React.FC = () => {
       setError(API_KEY_MISSING_MSG); 
     }
   }, [applyTheme]);
-
-  useEffect(() => {
-    // Set API Key error only if user is logged in and key is missing
-    if (user && !process.env.API_KEY) {
-        setError(API_KEY_MISSING_MSG);
-    } else if (user && process.env.API_KEY && error === API_KEY_MISSING_MSG) {
-        setError(null); // Clear API key error if key is now present
-    }
-  }, [user, error, apiKeyStatus]);
 
   const handleSaveSettings = (newSettings: AppSettings) => {
     // Ensure API key display is always from env, not user input affecting this specific display
@@ -304,35 +262,50 @@ const App: React.FC = () => {
     setPatientCondition('');
   };
 
-  const openAuthModal = () => {
-    netlifyIdentity.open();
-  };
+  return (
+    <div className="container mx-auto px-2 sm:px-4 py-8 min-h-screen flex flex-col bg-gray-50 rounded-xl shadow-2xl">
+      <Header clinicName={appSettings.clinicName} onToggleSettings={() => setShowSettingsPanel(true)} />
+      
+      {showSettingsPanel && (
+        <SettingsPanel
+            currentSettings={appSettings}
+            onSave={handleSaveSettings}
+            onClose={() => setShowSettingsPanel(false)}
+        />
+      )}
 
-  const handleLogoutClick = () => {
-    netlifyIdentity.logout();
-  };
-
-  if (!user) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-green-400 via-teal-400 to-blue-500 p-4">
-        <div className="bg-white p-8 rounded-lg shadow-xl text-center">
-          <h1 className="text-3xl font-bold mb-6 text-gray-700">Welcome to the Diet Planner</h1>
-          <p className="mb-8 text-gray-600">Please log in or sign up to continue.</p>
-          <button
-            onClick={openAuthModal}
-            className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
-          >
-            Login / Sign Up
-          </button>
-        </div>
+      <div className="my-6 flex justify-center space-x-2 sm:space-x-4">
+        <button
+          onClick={() => switchMode('dailyPlanner')}
+          className={`px-4 py-2 rounded-lg font-semibold transition-all duration-200 ease-in-out flex items-center space-x-2 shadow
+                      ${appMode === 'dailyPlanner' ? 'tailwind-primary-button scale-105' : 'tailwind-secondary-button'}`}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-3.75h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" /></svg>
+          <span>Daily Planner</span>
+        </button>
+        <button
+          onClick={() => switchMode('singleChecker')}
+          className={`px-4 py-2 rounded-lg font-semibold transition-all duration-200 ease-in-out flex items-center space-x-2 shadow
+                      ${appMode === 'singleChecker' ? 'tailwind-accent-button text-white scale-105' : 'tailwind-secondary-button'}`}
+        >
+           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
+          <span>Single Food Lookup</span>
+        </button>
       </div>
-    );
-  }
 
-  // Main application content for logged-in users
-  if (showSettingsPanel) {
-    return <SettingsPanel currentSettings={appSettings} onSave={handleSaveSettings} onClose={() => setShowSettingsPanel(false)} />;
-  }
+      <main className="flex-grow">
+        <div className="max-w-2xl mx-auto">
+          {apiKeyStatus === API_KEY_MISSING_MSG && (
+             <div className="my-4 p-3 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-md shadow-sm">
+                <p className="font-bold">API Key Missing!</p>
+                <p>{apiKeyStatus}</p>
+                <p className="text-xs mt-2">Note: Full authentication (like Gmail Login) and persistent storage for adherence tracking visible to a nutritionist require backend infrastructure, which is not part of this demo application.</p>
+             </div>
+          )}
+          {apiKeyStatus === API_KEY_CHECK_MSG && (
+             <div className="my-4 p-3 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 rounded-md shadow-sm">
+                <p>{apiKeyStatus}</p>
+             </div>
           )}
           
           {isLoading && <LoadingSpinner />}
