@@ -22,8 +22,8 @@ const Header: React.FC<HeaderProps> = ({ userEmail, onLogout }) => {
     <header className="flex items-center justify-between bg-[var(--color-header-bg)] p-4 shadow-md">
       {/* Left: Logos */}
       <div className="flex items-center gap-4">
-        <img src="/public/images/santaan.png" alt="Santaan Logo" className="h-10 w-auto object-contain" />
-        <img src="/public/images/skids.png" alt="Skids Logo" className="h-12 w-auto object-contain" />
+        <img src="/images/santaan.png" alt="Santaan Logo" className="h-10 w-auto object-contain" />
+        <img src="/images/skids.png" alt="Skids Logo" className="h-12 w-auto object-contain" />
       </div>
 
       {/* Center: Title */}
