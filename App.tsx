@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import netlifyIdentity, { User } from 'netlify-identity-widget';
 import Header from './components/Header';
@@ -22,7 +21,7 @@ import { fetchCalorieInfo, analyzeDailyIntake, suggestMealPlans } from './servic
 import { 
     API_KEY_CHECK_MSG, API_KEY_MISSING_MSG, API_KEY_PRESENT_MSG, 
     DEFAULT_SETTINGS, LOCAL_STORAGE_SETTINGS_KEY, THEME_OPTIONS,
-    APP_TITLE // Import APP_TITLE
+    // APP_TITLE // Removed unused import
 } from './constants';
 
 const fileToBase64 = (file: File): Promise<string> => {
@@ -343,13 +342,13 @@ const App: React.FC = () => {
                 <p className="text-xs mt-1">Some features will be disabled. Please set it up in settings or environment variables.</p>
             </div>
         )}
-        <div className="bg-[var(--color-background)] p-8 rounded-lg shadow-xl text-center max-w-md w-full">
+        <div className="bg-[var(--color-background)] p-8 rounded-lg shadow-xl text-center max-w-lg w-full">
           <div className="inline-flex items-center bg-[var(--color-header-bg)] p-3 sm:p-4 rounded-lg shadow-lg mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="var(--color-primary)" className="w-10 h-10 sm:w-12 sm:h-12 mr-3 sm:mr-4">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 9.75 CeresStyle.RangeSlider.ThumbContainerStyle 6.75a2.25 2.25 0 00-2.25-2.25H4.5A2.25 2.25 0 002.25 6.75v10.5A2.25 2.25 0 004.5 19.5h15a2.25 2.25 0 002.25-2.25V9.75z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 9.75H4.5M16.5 4.5V8.25M8.25 4.5V8.25M12 13.5h.008v.008H12v-.008zm0 3h.008v.008H12v-.008zm0 3h.008v.008H12v-.008zm3-6h.008v.008H15v-.008zm0 3h.008v.008H15v-.008zm0 3h.008v.008H15v-.008zm3-6h.008v.008H18v-.008zm0 3h.008v.008H18v-.008zm0 3h.008v.008H18v-.008zM4.5 13.5H9m-4.5 3H9m-4.5 3H9" />
-            </svg>
-            <h1 className="text-2xl sm:text-3xl font-bold text-[var(--color-header-text)]">{APP_TITLE}</h1>
+            <img src="/assets/images/santaan.png" alt="Santaan Logo" className="w-auto h-10 sm:h-12 mr-3 sm:mr-4" />
+            <img src="/assets/images/skids.png" alt="Skids Logo" className="w-auto h-10 sm:h-12 mr-3 sm:mr-4" />
+            <h1 className="text-2xl sm:text-3xl font-bold text-[var(--color-header-text)]">
+              <span className="underline">NUTRITION</span><span className="text-[var(--color-accent)]">.AI</span>
+            </h1>
           </div>
           <p className="mb-8 text-[var(--color-text-secondary)]">Please log in or sign up to continue.</p>
           <button
@@ -382,7 +381,8 @@ const App: React.FC = () => {
           className={`px-4 py-2 rounded-lg font-semibold transition-all duration-200 ease-in-out flex items-center space-x-2 shadow
                       ${appMode === 'dailyPlanner' ? 'tailwind-primary-button scale-105' : 'tailwind-secondary-button'}`}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-3.75h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" /></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-3.75h.008v.008H12v-.008zm0 3h.008v.008H12v-.008zm0 3h.008v.008H12v-.008zm3-6h.008v.008H15v-.008zm0 3h.008v.008H15v-.008zm0 3h.008v.008H15v-.008zm3-6h.008v.008H18v-.008zm0 3h.008v.008H18v-.008zm0 3h.008v.008H18v-.008zM4.5 13.5H9m-4.5 3H9m-4.5 3H9" />
+            </svg>
           <span>Daily Planner</span>
         </button>
         <button
