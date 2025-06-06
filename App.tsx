@@ -344,8 +344,8 @@ const App: React.FC = () => {
         )}
         <div className="bg-[var(--color-background)] p-8 rounded-lg shadow-xl text-center max-w-lg w-full">
           <div className="inline-flex items-center bg-[var(--color-header-bg)] p-3 sm:p-4 rounded-lg shadow-lg mb-6">
-            <img src="/assets/images/santaan.png" alt="Santaan Logo" className="w-auto h-10 sm:h-12 mr-3 sm:mr-4" />
-            <img src="/assets/images/skids.png" alt="Skids Logo" className="w-auto h-10 sm:h-12 mr-3 sm:mr-4" />
+            <img src="/public/images/santaan.png" alt="Santaan Logo" className="w-auto h-10 sm:h-12 mr-3 sm:mr-4" />
+            <img src="/public/images/skids.png" alt="Skids Logo" className="w-auto h-10 sm:h-12 mr-3 sm:mr-4" />
             <h1 className="text-2xl sm:text-3xl font-bold text-[var(--color-header-text)]">
               <span className="underline">NUTRITION</span><span className="text-[var(--color-accent)]">.AI</span>
             </h1>
