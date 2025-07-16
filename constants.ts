@@ -1,7 +1,7 @@
 
 import { AppSettings, ThemeOption } from "./types";
 
-export const GEMINI_MODEL_NAME = 'gemini-2.5-flash-preview-04-17';
+export const GEMINI_MODEL_NAME = 'gemini-2.5-flash';
 export const API_KEY_CHECK_MSG = "Checking for API Key...";
 export const API_KEY_MISSING_MSG = "API_KEY environment variable is not set. Please configure it to use the app.";
 export const API_KEY_PRESENT_MSG = "API Key found. Ready to use.";
