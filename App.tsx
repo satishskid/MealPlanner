@@ -9,6 +9,9 @@ import AdminLogin from './components/AdminLogin';
 import AdminDashboard from './components/AdminDashboard';
 import NutritionistManagement from './components/NutritionistManagement';
 import AssignmentManagement from './components/AssignmentManagement';
+import OrganizationRegistration from './components/OrganizationRegistration';
+import OrganizationManagement from './components/OrganizationManagement';
+import WhiteLabelPortal from './components/WhiteLabelPortal';
 import PatientStatusTracker from './components/PatientStatusTracker';
 import ProfessionalReport from './components/ProfessionalReport';
 import FoodInput from './components/FoodInput';
@@ -25,7 +28,7 @@ import SettingsPanel from './components/SettingsPanel'; // Ensured relative path
 import {
   CalorieInfo, GroundingMetadata, AppMode, UserRole, UserProfile, DailyFoodLog,
   DailyMealAnalysis, MealPlan, NutritionistViewData, AdherenceLog, DailyAdherence,
-  AppSettings, NutritionistProfile, PatientCase, AdminProfile /*ThemeOption, DoctorProfile*/
+  AppSettings, NutritionistProfile, PatientCase, AdminProfile, OrganizationProfile, WhiteLabelConfig /*ThemeOption, DoctorProfile*/
 } from './types';
 import { fetchCalorieInfo, analyzeDailyIntake, suggestMealPlans } from './services/geminiService';
 import { 
@@ -62,7 +65,10 @@ const App: React.FC = () => {
   const [showLandingPage, setShowLandingPage] = useState<boolean>(true);
   const [showNutritionistLogin, setShowNutritionistLogin] = useState<boolean>(false);
   const [showAdminLogin, setShowAdminLogin] = useState<boolean>(false);
-  const [adminView, setAdminView] = useState<'dashboard' | 'nutritionists' | 'assignments'>('dashboard');
+  const [adminView, setAdminView] = useState<'dashboard' | 'nutritionists' | 'assignments' | 'organizations'>('dashboard');
+  const [showOrgRegistration, setShowOrgRegistration] = useState<boolean>(false);
+  const [currentOrganization, setCurrentOrganization] = useState<OrganizationProfile | null>(null);
+  const [isWhiteLabel, setIsWhiteLabel] = useState<boolean>(false);
   const [apiKeyStatus, setApiKeyStatus] = useState<string>(API_KEY_CHECK_MSG);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -195,6 +201,21 @@ const App: React.FC = () => {
       setShowAdminLogin(true);
       setShowLandingPage(false);
     }
+
+    // Check for organization subdomain or white-label portal
+    const hostname = window.location.hostname;
+    if (hostname !== 'localhost' && hostname !== 'nutreeai.netlify.app' && hostname.includes('nutreeai.com')) {
+      // Extract subdomain (e.g., 'clinic-name' from 'clinic-name.nutreeai.com')
+      const subdomain = hostname.split('.')[0];
+      // In a real implementation, you would fetch organization data from API
+      // For demo, we'll simulate organization detection
+      if (subdomain && subdomain !== 'www') {
+        setIsWhiteLabel(true);
+        setShowLandingPage(false);
+        // Simulate loading organization data
+        // setCurrentOrganization(fetchedOrgData);
+      }
+    }
   }, []);
 
   const openAuthModal = () => {
@@ -254,6 +275,24 @@ const App: React.FC = () => {
   const handleBackToMainFromAdmin = () => {
     setShowAdminLogin(false);
     setShowLandingPage(true);
+  };
+
+  const handleOrganizationRegistration = (organization: OrganizationProfile) => {
+    // In a real implementation, this would save to backend
+    console.log('Organization registered:', organization);
+    setShowOrgRegistration(false);
+    setShowLandingPage(true);
+    // Show success message or redirect to organization portal
+  };
+
+  const handleShowOrgRegistration = () => {
+    setShowOrgRegistration(true);
+    setShowLandingPage(false);
+  };
+
+  const handleWhiteLabelPatientSubmission = (profile: UserProfile, foodLog: DailyFoodLog) => {
+    // Handle patient submission in white-label context
+    handleDailyLogSubmit(foodLog);
   };
 
   const handleViewProfessionalReport = () => {
@@ -514,6 +553,30 @@ const App: React.FC = () => {
       );
     }
 
+    if (adminView === 'organizations') {
+      return (
+        <div className="min-h-screen bg-gray-50">
+          <div className="bg-white shadow-sm border-b p-4">
+            <div className="max-w-7xl mx-auto flex justify-between items-center">
+              <button
+                onClick={() => setAdminView('dashboard')}
+                className="text-blue-600 hover:text-blue-800"
+              >
+                ← Back to Dashboard
+              </button>
+              <button
+                onClick={handleAdminLogout}
+                className="bg-red-600 text-white px-4 py-2 rounded-lg text-sm"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+          <OrganizationManagement onClose={() => setAdminView('dashboard')} />
+        </div>
+      );
+    }
+
     return <AdminDashboard admin={admin} onLogout={handleAdminLogout} onNavigate={setAdminView} />;
   }
 
@@ -525,6 +588,47 @@ const App: React.FC = () => {
   // Show admin login page
   if (showAdminLogin) {
     return <AdminLogin onLogin={handleAdminLogin} onBackToMain={handleBackToMainFromAdmin} />;
+  }
+
+  // Show organization registration
+  if (showOrgRegistration) {
+    return (
+      <OrganizationRegistration
+        onRegistrationComplete={handleOrganizationRegistration}
+        onCancel={() => {
+          setShowOrgRegistration(false);
+          setShowLandingPage(true);
+        }}
+      />
+    );
+  }
+
+  // Show white-label portal for organization subdomains
+  if (isWhiteLabel && currentOrganization) {
+    const whiteLabelConfig: WhiteLabelConfig = {
+      organizationId: currentOrganization.id,
+      domain: window.location.hostname,
+      branding: currentOrganization.branding,
+      customizations: {
+        hideNutreeAIBranding: false,
+        enableCustomAnalytics: false
+      },
+      features: {
+        enableAdvancedFoodInput: true,
+        enableBulkUpload: currentOrganization.settings.allowBulkUploads,
+        enableAPIAccess: false,
+        enableCustomReports: currentOrganization.settings.enableCustomReports,
+        enableMobileApp: true
+      }
+    };
+
+    return (
+      <WhiteLabelPortal
+        organization={currentOrganization}
+        whiteLabelConfig={whiteLabelConfig}
+        onPatientSubmission={handleWhiteLabelPatientSubmission}
+      />
+    );
   }
 
   // Show nutritionist login page
@@ -542,6 +646,7 @@ const App: React.FC = () => {
             onGetStarted={handleGetStarted}
             onNutritionistLogin={handleSwitchToNutritionistLogin}
             onAdminLogin={handleSwitchToAdminLogin}
+            onPartnerRegistration={handleShowOrgRegistration}
           />
         </main>
         <Footer />

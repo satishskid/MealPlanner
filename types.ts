@@ -358,3 +358,196 @@ export interface ComplianceFinding {
   recommendation: string;
   affectedRecords?: number;
 }
+
+// Multi-Tenant B2B Platform Types
+export type OrganizationType = 'clinic' | 'hospital' | 'wellness_center' | 'school' | 'corporate' | 'telehealth' | 'research';
+export type NutritionistAssignmentModel = 'in_house' | 'nutreeai_provided' | 'hybrid';
+export type BillingModel = 'per_case' | 'monthly_subscription' | 'annual_contract' | 'custom';
+
+export interface OrganizationProfile {
+  id: string;
+  name: string;
+  type: OrganizationType;
+  subdomain: string; // e.g., 'clinic-name' for clinic-name.nutreeai.com
+  customDomain?: string; // e.g., 'nutrition.clinicname.com'
+  contactInfo: {
+    primaryContact: string;
+    email: string;
+    phone: string;
+    address: {
+      street: string;
+      city: string;
+      state: string;
+      zipCode: string;
+      country: string;
+    };
+  };
+  branding: {
+    logo?: string;
+    primaryColor: string;
+    secondaryColor: string;
+    accentColor: string;
+    fontFamily?: string;
+    customCSS?: string;
+    welcomeMessage?: string;
+    footerText?: string;
+  };
+  settings: {
+    nutritionistAssignmentModel: NutritionistAssignmentModel;
+    maxPatientsPerMonth: number;
+    allowBulkUploads: boolean;
+    requirePatientConsent: boolean;
+    enableCustomReports: boolean;
+    autoAssignCases: boolean;
+    escalationThresholdHours: number;
+  };
+  billing: {
+    model: BillingModel;
+    pricePerCase?: number;
+    monthlyFee?: number;
+    contractStartDate?: string;
+    contractEndDate?: string;
+    billingContact: string;
+    paymentMethod?: string;
+  };
+  isActive: boolean;
+  createdAt: string;
+  lastActiveAt: string;
+  totalCasesProcessed: number;
+  currentMonthCases: number;
+}
+
+export interface OrganizationAdmin {
+  id: string;
+  organizationId: string;
+  name: string;
+  email: string;
+  role: 'org_admin' | 'org_manager' | 'org_viewer';
+  permissions: OrganizationPermission[];
+  isActive: boolean;
+  createdAt: string;
+  lastLoginAt?: string;
+}
+
+export type OrganizationPermission =
+  | 'manage_nutritionists'
+  | 'view_cases'
+  | 'manage_settings'
+  | 'view_analytics'
+  | 'manage_billing'
+  | 'export_data'
+  | 'manage_users';
+
+export interface OrganizationNutritionist extends NutritionistProfile {
+  organizationId: string;
+  employeeId?: string;
+  isInHouse: boolean;
+  canHandleExternalCases: boolean; // For hybrid model
+  organizationRole?: string; // e.g., "Senior Clinical Nutritionist"
+  supervisorId?: string;
+}
+
+export interface OrganizationCase extends PatientCase {
+  organizationId: string;
+  patientOrganizationId?: string; // For tracking patient's organization affiliation
+  assignmentModel: NutritionistAssignmentModel;
+  billingStatus: 'pending' | 'billed' | 'paid' | 'disputed';
+  escalatedToNutreeAI?: boolean; // For hybrid model escalations
+  organizationNotes?: string;
+  complianceFlags?: string[];
+}
+
+export interface WhiteLabelConfig {
+  organizationId: string;
+  domain: string;
+  branding: OrganizationProfile['branding'];
+  customizations: {
+    hideNutreeAIBranding: boolean;
+    customTermsOfService?: string;
+    customPrivacyPolicy?: string;
+    customSupportContact?: string;
+    enableCustomAnalytics?: boolean;
+    googleAnalyticsId?: string;
+  };
+  features: {
+    enableAdvancedFoodInput: boolean;
+    enableBulkUpload: boolean;
+    enableAPIAccess: boolean;
+    enableCustomReports: boolean;
+    enableMobileApp: boolean;
+  };
+}
+
+export interface OrganizationAnalytics {
+  organizationId: string;
+  period: {
+    start: string;
+    end: string;
+  };
+  metrics: {
+    totalCases: number;
+    completedCases: number;
+    averageReviewTime: number;
+    patientSatisfactionScore: number;
+    nutritionistUtilization: number;
+    costPerCase: number;
+    revenue: number;
+  };
+  casesByStatus: Record<CaseStatus, number>;
+  casesByPriority: Record<CasePriority, number>;
+  nutritionistPerformance: NutritionistPerformance[];
+  patientDemographics: {
+    ageGroups: Record<string, number>;
+    cuisinePreferences: Record<string, number>;
+    geographicDistribution: Record<string, number>;
+  };
+}
+
+export interface PDFReportConfig {
+  organizationId: string;
+  template: 'standard' | 'clinical' | 'wellness' | 'research' | 'custom';
+  branding: {
+    includeLogo: boolean;
+    headerText?: string;
+    footerText?: string;
+    watermark?: string;
+  };
+  sections: {
+    includePatientInfo: boolean;
+    includeFoodLog: boolean;
+    includeAIAnalysis: boolean;
+    includeProfessionalNotes: boolean;
+    includeRecommendations: boolean;
+    includeDisclaimer: boolean;
+    customSections?: PDFCustomSection[];
+  };
+  signatures: {
+    requireNutritionistSignature: boolean;
+    requirePatientAcknowledgment: boolean;
+    includeDigitalTimestamp: boolean;
+  };
+}
+
+export interface PDFCustomSection {
+  id: string;
+  title: string;
+  content: string;
+  position: number;
+  isRequired: boolean;
+}
+
+export interface APIIntegration {
+  organizationId: string;
+  apiKey: string;
+  webhookUrl?: string;
+  allowedEndpoints: string[];
+  rateLimit: number; // requests per hour
+  isActive: boolean;
+  createdAt: string;
+  lastUsed?: string;
+  usage: {
+    totalRequests: number;
+    monthlyRequests: number;
+    errorRate: number;
+  };
+}

@@ -4,9 +4,10 @@ interface LandingPageProps {
   onGetStarted: () => void;
   onNutritionistLogin?: () => void;
   onAdminLogin?: () => void;
+  onPartnerRegistration?: () => void;
 }
 
-const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onNutritionistLogin, onAdminLogin }) => {
+const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onNutritionistLogin, onAdminLogin, onPartnerRegistration }) => {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       {/* Hero Section */}
@@ -110,6 +111,22 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onNutritionistL
           informed decisions that support your health, respect your culture, and bring joy to your meals.
         </p>
       </div>
+
+      {/* B2B Partner Section */}
+      {onPartnerRegistration && (
+        <div className="text-center mt-8 bg-white/10 backdrop-blur-sm rounded-xl p-6">
+          <h3 className="text-xl font-bold text-white mb-3">Healthcare Providers & Organizations</h3>
+          <p className="text-white/90 mb-4 max-w-2xl mx-auto">
+            Join our partner network to offer white-label nutrition services to your patients and members.
+          </p>
+          <button
+            onClick={onPartnerRegistration}
+            className="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-lg font-medium transition-colors border border-white/30"
+          >
+            Become a Partner
+          </button>
+        </div>
+      )}
 
       {/* Discrete Admin Access */}
       {onAdminLogin && (

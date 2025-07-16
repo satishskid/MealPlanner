@@ -50,6 +50,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ admin, onLogout, onNavi
 
   const navigationItems = [
     { id: 'overview', label: 'Overview', icon: '📊', permission: 'view_analytics' },
+    { id: 'organizations', label: 'Organizations', icon: '🏢', permission: 'manage_patients' },
     { id: 'nutritionists', label: 'Nutritionists', icon: '👩‍⚕️', permission: 'manage_nutritionists' },
     { id: 'patients', label: 'Patients', icon: '👥', permission: 'manage_patients' },
     { id: 'assignments', label: 'Assignments', icon: '🔄', permission: 'manage_assignments' },
@@ -215,6 +216,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ admin, onLogout, onNavi
     switch (currentView) {
       case 'overview':
         return renderOverview();
+      case 'organizations':
+        return <div className="bg-white rounded-lg p-6 shadow-sm border"><h3 className="text-lg font-semibold">Organization Management</h3><p className="text-gray-600 mt-2">Organization management interface will be implemented here.</p></div>;
       case 'nutritionists':
         return <div className="bg-white rounded-lg p-6 shadow-sm border"><h3 className="text-lg font-semibold">Nutritionist Management</h3><p className="text-gray-600 mt-2">Nutritionist management interface will be implemented here.</p></div>;
       case 'patients':
