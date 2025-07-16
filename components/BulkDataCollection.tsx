@@ -3,6 +3,7 @@ import { UserProfile, DailyFoodLog } from '../types';
 
 interface BulkDataEntry {
   id: string;
+  uniqueId: string; // Organization-specific unique identifier
   name: string;
   email: string;
   phone?: string;
@@ -13,7 +14,6 @@ interface BulkDataEntry {
   dinner: string;
   snacks: string;
   additionalNotes?: string;
-  consentGiven: boolean;
   submittedAt: string;
 }
 
@@ -30,6 +30,7 @@ const BulkDataCollection: React.FC<BulkDataCollectionProps> = ({ onSubmit, onClo
   function createEmptyEntry(): BulkDataEntry {
     return {
       id: `entry_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      uniqueId: '',
       name: '',
       email: '',
       phone: '',
@@ -40,7 +41,6 @@ const BulkDataCollection: React.FC<BulkDataCollectionProps> = ({ onSubmit, onClo
       dinner: '',
       snacks: '',
       additionalNotes: '',
-      consentGiven: false,
       submittedAt: new Date().toISOString()
     };
   }
@@ -66,17 +66,17 @@ const BulkDataCollection: React.FC<BulkDataCollectionProps> = ({ onSubmit, onClo
     setIsSubmitting(true);
 
     // Validate all entries
-    const validEntries = entries.filter(entry => 
-      entry.name && 
-      entry.email && 
-      entry.ageGroup && 
-      entry.cuisinePreference && 
-      entry.consentGiven &&
+    const validEntries = entries.filter(entry =>
+      entry.uniqueId &&
+      entry.name &&
+      entry.email &&
+      entry.ageGroup &&
+      entry.cuisinePreference &&
       (entry.breakfast || entry.lunch || entry.dinner)
     );
 
     if (validEntries.length === 0) {
-      alert('Please fill in at least one complete entry with consent.');
+      alert('Please fill in at least one complete entry with unique ID, name, email, age group, cuisine preference, and at least one meal.');
       setIsSubmitting(false);
       return;
     }
@@ -109,17 +109,17 @@ const BulkDataCollection: React.FC<BulkDataCollectionProps> = ({ onSubmit, onClo
         if (values.length >= headers.length && values[0]) {
           const entry: BulkDataEntry = {
             id: `csv_${Date.now()}_${i}`,
-            name: values[0] || '',
-            email: values[1] || '',
-            phone: values[2] || '',
-            ageGroup: values[3] || '',
-            cuisinePreference: values[4] || '',
-            breakfast: values[5] || '',
-            lunch: values[6] || '',
-            dinner: values[7] || '',
-            snacks: values[8] || '',
-            additionalNotes: values[9] || '',
-            consentGiven: values[10]?.toLowerCase() === 'yes' || values[10]?.toLowerCase() === 'true',
+            uniqueId: values[0] || '',
+            name: values[1] || '',
+            email: values[2] || '',
+            phone: values[3] || '',
+            ageGroup: values[4] || '',
+            cuisinePreference: values[5] || '',
+            breakfast: values[6] || '',
+            lunch: values[7] || '',
+            dinner: values[8] || '',
+            snacks: values[9] || '',
+            additionalNotes: values[10] || '',
             submittedAt: new Date().toISOString()
           };
           csvEntries.push(entry);
@@ -137,13 +137,13 @@ const BulkDataCollection: React.FC<BulkDataCollectionProps> = ({ onSubmit, onClo
 
   const downloadCSVTemplate = () => {
     const headers = [
-      'Name', 'Email', 'Phone', 'Age Group', 'Cuisine Preference',
-      'Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Additional Notes', 'Consent (Yes/No)'
+      'Unique ID', 'Name', 'Email', 'Phone', 'Age Group', 'Cuisine Preference',
+      'Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Additional Notes'
     ];
-    
+
     const sampleData = [
-      'John Doe', 'john@example.com', '+1234567890', 'Adult (30-49)', 'North Indian',
-      'Paratha with curd', 'Rice dal vegetables', 'Roti chicken curry', 'Tea biscuits', 'No allergies', 'Yes'
+      'EMP001', 'John Doe', 'john@example.com', '+1234567890', 'Adult (30-49)', 'North Indian',
+      'Paratha with curd OR Oats with milk', 'Rice AND dal AND vegetables', 'Roti AND chicken curry', 'Tea with biscuits OR fruits', 'No allergies'
     ];
     
     const csvContent = [headers.join(','), sampleData.join(',')].join('\n');
@@ -158,14 +158,13 @@ const BulkDataCollection: React.FC<BulkDataCollectionProps> = ({ onSubmit, onClo
 
   const exportCurrentData = () => {
     const headers = [
-      'Name', 'Email', 'Phone', 'Age Group', 'Cuisine Preference',
-      'Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Additional Notes', 'Consent', 'Submitted At'
+      'Unique ID', 'Name', 'Email', 'Phone', 'Age Group', 'Cuisine Preference',
+      'Breakfast', 'Lunch', 'Dinner', 'Snacks', 'Additional Notes', 'Submitted At'
     ];
-    
+
     const csvData = entries.map(entry => [
-      entry.name, entry.email, entry.phone, entry.ageGroup, entry.cuisinePreference,
-      entry.breakfast, entry.lunch, entry.dinner, entry.snacks, entry.additionalNotes,
-      entry.consentGiven ? 'Yes' : 'No', entry.submittedAt
+      entry.uniqueId, entry.name, entry.email, entry.phone, entry.ageGroup, entry.cuisinePreference,
+      entry.breakfast, entry.lunch, entry.dinner, entry.snacks, entry.additionalNotes, entry.submittedAt
     ]);
     
     const csvContent = [headers.join(','), ...csvData.map(row => row.join(','))].join('\n');
@@ -231,8 +230,8 @@ const BulkDataCollection: React.FC<BulkDataCollectionProps> = ({ onSubmit, onClo
             <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
               <h3 className="font-semibold text-blue-900 mb-2">Upload CSV File</h3>
               <p className="text-blue-700 text-sm mb-3">
-                Upload a CSV file with columns: Name, Email, Phone, Age Group, Cuisine Preference, 
-                Breakfast, Lunch, Dinner, Snacks, Additional Notes, Consent
+                Upload a CSV file with columns: Unique ID, Name, Email, Phone, Age Group, Cuisine Preference,
+                Breakfast, Lunch, Dinner, Snacks, Additional Notes. Use OR/AND operators in meal fields for variety.
               </p>
               <input
                 type="file"
@@ -265,6 +264,21 @@ const BulkDataCollection: React.FC<BulkDataCollectionProps> = ({ onSubmit, onClo
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {/* Unique ID */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Unique ID * <span className="text-xs text-gray-500">(Employee ID, Student ID, etc.)</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={entry.uniqueId}
+                      onChange={(e) => updateEntry(index, 'uniqueId', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="e.g., EMP001, STU123, etc."
+                      required
+                    />
+                  </div>
+
                   {/* Personal Information */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -366,7 +380,7 @@ const BulkDataCollection: React.FC<BulkDataCollectionProps> = ({ onSubmit, onClo
                         onChange={(e) => updateEntry(index, 'breakfast', e.target.value)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         rows={2}
-                        placeholder="e.g., Paratha with curd and pickle"
+                        placeholder="e.g., Paratha with curd OR Oats with milk OR Bread AND butter"
                       />
                     </div>
 
@@ -379,7 +393,7 @@ const BulkDataCollection: React.FC<BulkDataCollectionProps> = ({ onSubmit, onClo
                         onChange={(e) => updateEntry(index, 'lunch', e.target.value)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         rows={2}
-                        placeholder="e.g., Rice, dal, vegetables, and salad"
+                        placeholder="e.g., Rice AND dal AND vegetables OR Roti AND sabzi"
                       />
                     </div>
 
@@ -392,7 +406,7 @@ const BulkDataCollection: React.FC<BulkDataCollectionProps> = ({ onSubmit, onClo
                         onChange={(e) => updateEntry(index, 'dinner', e.target.value)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         rows={2}
-                        placeholder="e.g., Roti with chicken curry and vegetables"
+                        placeholder="e.g., Roti AND chicken curry OR Rice AND dal AND vegetables"
                       />
                     </div>
 
@@ -405,14 +419,14 @@ const BulkDataCollection: React.FC<BulkDataCollectionProps> = ({ onSubmit, onClo
                         onChange={(e) => updateEntry(index, 'snacks', e.target.value)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         rows={2}
-                        placeholder="e.g., Tea with biscuits, fruits"
+                        placeholder="e.g., Tea with biscuits OR Coffee AND cookies OR Fruits"
                       />
                     </div>
                   </div>
                 </div>
 
-                {/* Additional Notes and Consent */}
-                <div className="mt-4 space-y-3">
+                {/* Additional Notes */}
+                <div className="mt-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Additional Notes
@@ -422,23 +436,8 @@ const BulkDataCollection: React.FC<BulkDataCollectionProps> = ({ onSubmit, onClo
                       onChange={(e) => updateEntry(index, 'additionalNotes', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       rows={2}
-                      placeholder="Any allergies, dietary restrictions, or special notes..."
+                      placeholder="Any allergies, dietary restrictions, health conditions, or special notes..."
                     />
-                  </div>
-
-                  <div className="flex items-start space-x-2">
-                    <input
-                      type="checkbox"
-                      id={`consent-${index}`}
-                      checked={entry.consentGiven}
-                      onChange={(e) => updateEntry(index, 'consentGiven', e.target.checked)}
-                      className="mt-1 rounded"
-                      required
-                    />
-                    <label htmlFor={`consent-${index}`} className="text-sm text-gray-700">
-                      I consent to having this nutrition data analyzed by certified nutritionists 
-                      and understand that this analysis is for informational purposes only.
-                    </label>
                   </div>
                 </div>
               </div>
@@ -461,14 +460,18 @@ const BulkDataCollection: React.FC<BulkDataCollectionProps> = ({ onSubmit, onClo
         <div className="mt-8 bg-blue-50 rounded-lg p-6">
           <h3 className="font-semibold text-blue-900 mb-3">Instructions for Bulk Data Collection</h3>
           <ul className="text-blue-800 space-y-2 text-sm">
+            <li>• <strong>Unique ID is required</strong> for each entry (Employee ID, Student ID, etc.)</li>
             <li>• Fill in at least one meal (breakfast, lunch, or dinner) for each entry</li>
             <li>• Use natural language to describe meals (e.g., "Rice with dal and vegetables")</li>
+            <li>• <strong>Use OR for alternatives:</strong> "Eggs OR Oats OR Paratha" (different options on different days)</li>
+            <li>• <strong>Use AND for combinations:</strong> "Rice AND dal AND vegetables" (items eaten together)</li>
+            <li>• <strong>Mix both operators:</strong> "Rice AND dal OR Roti AND sabzi" (complex meal patterns)</li>
             <li>• Include cooking methods when possible (fried, boiled, grilled)</li>
             <li>• Mention approximate quantities if known (e.g., "2 rotis", "1 bowl rice")</li>
             <li>• Use local food names - our AI understands cultural terms</li>
-            <li>• Consent is required for each entry before submission</li>
             <li>• You can upload a CSV file for faster data entry</li>
             <li>• Download the CSV template to see the required format</li>
+            <li>• Reports will be generated with unique IDs for easy organization tracking</li>
           </ul>
         </div>
       </div>

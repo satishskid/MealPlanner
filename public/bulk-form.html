@@ -28,7 +28,10 @@
                 <div class="bg-blue-50 rounded-lg p-4 mb-6">
                     <h3 class="font-semibold text-blue-900 mb-2">How to Fill This Form:</h3>
                     <ul class="text-blue-800 space-y-1 text-sm">
+                        <li>• <strong>Unique ID is required</strong> (Employee ID, Student ID, etc.)</li>
                         <li>• Describe your meals in natural language (e.g., "Rice with dal and vegetables")</li>
+                        <li>• <strong>Use OR for alternatives:</strong> "Eggs OR Oats" (different options on different days)</li>
+                        <li>• <strong>Use AND for combinations:</strong> "Rice AND dal AND vegetables" (items eaten together)</li>
                         <li>• Include cooking methods when possible (fried, boiled, grilled)</li>
                         <li>• Use local food names - our AI understands cultural terms</li>
                         <li>• Fill in at least one meal to get meaningful analysis</li>
@@ -42,6 +45,19 @@
                 <div class="mb-6">
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Personal Information</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Unique ID * <span class="text-xs text-gray-500">(Employee ID, Student ID, etc.)</span>
+                            </label>
+                            <input
+                                type="text"
+                                name="uniqueId"
+                                required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="e.g., EMP001, STU123, etc."
+                            />
+                        </div>
+
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">
                                 Name *
@@ -140,7 +156,7 @@
                                 name="breakfast"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 rows="3"
-                                placeholder="e.g., Paratha with curd and pickle"
+                                placeholder="e.g., Paratha with curd OR Oats with milk OR Bread AND butter"
                             ></textarea>
                         </div>
 
@@ -152,7 +168,7 @@
                                 name="lunch"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 rows="3"
-                                placeholder="e.g., Rice, dal, vegetables, and salad"
+                                placeholder="e.g., Rice AND dal AND vegetables OR Roti AND sabzi"
                             ></textarea>
                         </div>
 
@@ -164,7 +180,7 @@
                                 name="dinner"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 rows="3"
-                                placeholder="e.g., Roti with chicken curry and vegetables"
+                                placeholder="e.g., Roti AND chicken curry OR Rice AND dal AND vegetables"
                             ></textarea>
                         </div>
 
@@ -176,7 +192,7 @@
                                 name="snacks"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 rows="3"
-                                placeholder="e.g., Tea with biscuits, fruits"
+                                placeholder="e.g., Tea with biscuits OR Coffee AND cookies OR Fruits"
                             ></textarea>
                         </div>
                     </div>
@@ -195,23 +211,7 @@
                     ></textarea>
                 </div>
 
-                <!-- Consent -->
-                <div class="mb-6">
-                    <div class="flex items-start space-x-2">
-                        <input
-                            type="checkbox"
-                            name="consent"
-                            id="consent"
-                            required
-                            class="mt-1 rounded"
-                        />
-                        <label for="consent" class="text-sm text-gray-700">
-                            I consent to having my nutrition data analyzed by certified nutritionists 
-                            and understand that this analysis is for informational purposes only and 
-                            does not replace professional medical advice. *
-                        </label>
-                    </div>
-                </div>
+
 
                 <!-- Submit Button -->
                 <div class="text-center">
@@ -262,7 +262,12 @@
             const formData = new FormData(this);
             const data = Object.fromEntries(formData.entries());
             
-            // Validate that at least one meal is provided
+            // Validate required fields
+            if (!data.uniqueId) {
+                alert('Please provide a unique ID (Employee ID, Student ID, etc.).');
+                return;
+            }
+
             if (!data.breakfast && !data.lunch && !data.dinner) {
                 alert('Please fill in at least one meal (breakfast, lunch, or dinner) to get meaningful analysis.');
                 return;
