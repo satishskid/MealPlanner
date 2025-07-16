@@ -5,9 +5,10 @@ interface LandingPageProps {
   onNutritionistLogin?: () => void;
   onAdminLogin?: () => void;
   onPartnerRegistration?: () => void;
+  onBulkCollection?: () => void;
 }
 
-const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onNutritionistLogin, onAdminLogin, onPartnerRegistration }) => {
+const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onNutritionistLogin, onAdminLogin, onPartnerRegistration, onBulkCollection }) => {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       {/* Hero Section */}
@@ -27,14 +28,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onNutritionistL
           >
             Start Your Nutrition Journey
           </button>
-          {onNutritionistLogin && (
-            <button
-              onClick={onNutritionistLogin}
-              className="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-colors shadow-lg border-2 border-white/20"
-            >
-              Professional Login
-            </button>
-          )}
         </div>
       </div>
 
@@ -119,18 +112,37 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onNutritionistL
           <p className="text-white/90 mb-4 max-w-2xl mx-auto">
             Join our partner network to offer white-label nutrition services to your patients and members.
           </p>
-          <button
-            onClick={onPartnerRegistration}
-            className="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-lg font-medium transition-colors border border-white/30"
-          >
-            Become a Partner
-          </button>
+          <div className="flex flex-wrap justify-center gap-3">
+            <button
+              onClick={onPartnerRegistration}
+              className="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-lg font-medium transition-colors border border-white/30"
+            >
+              Become a Partner
+            </button>
+            {onBulkCollection && (
+              <button
+                onClick={onBulkCollection}
+                className="bg-blue-600/80 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors border border-white/30"
+              >
+                📊 Bulk Data Collection
+              </button>
+            )}
+          </div>
         </div>
       )}
 
-      {/* Discrete Admin Access */}
-      {onAdminLogin && (
-        <div className="text-center mt-8">
+      {/* Discrete Professional Access */}
+      <div className="text-center mt-8 space-x-4">
+        {onNutritionistLogin && (
+          <button
+            onClick={onNutritionistLogin}
+            className="text-white/40 hover:text-white/60 text-xs transition-colors duration-300"
+            title="Professional Access"
+          >
+            Professional
+          </button>
+        )}
+        {onAdminLogin && (
           <button
             onClick={onAdminLogin}
             className="text-white/40 hover:text-white/60 text-xs transition-colors duration-300"
@@ -138,8 +150,8 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onNutritionistL
           >
             System Admin
           </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

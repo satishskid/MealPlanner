@@ -12,6 +12,7 @@ import AssignmentManagement from './components/AssignmentManagement';
 import OrganizationRegistration from './components/OrganizationRegistration';
 import OrganizationManagement from './components/OrganizationManagement';
 import WhiteLabelPortal from './components/WhiteLabelPortal';
+import BulkDataCollection from './components/BulkDataCollection';
 import PatientStatusTracker from './components/PatientStatusTracker';
 import ProfessionalReport from './components/ProfessionalReport';
 import FoodInput from './components/FoodInput';
@@ -69,6 +70,7 @@ const App: React.FC = () => {
   const [showOrgRegistration, setShowOrgRegistration] = useState<boolean>(false);
   const [currentOrganization, setCurrentOrganization] = useState<OrganizationProfile | null>(null);
   const [isWhiteLabel, setIsWhiteLabel] = useState<boolean>(false);
+  const [showBulkCollection, setShowBulkCollection] = useState<boolean>(false);
   const [apiKeyStatus, setApiKeyStatus] = useState<string>(API_KEY_CHECK_MSG);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -293,6 +295,31 @@ const App: React.FC = () => {
   const handleWhiteLabelPatientSubmission = (profile: UserProfile, foodLog: DailyFoodLog) => {
     // Handle patient submission in white-label context
     handleDailyLogSubmit(foodLog);
+  };
+
+  const handleBulkDataSubmission = async (entries: any[]) => {
+    // Process bulk entries - in production, this would send to backend
+    console.log('Bulk data submitted:', entries);
+
+    // For demo, we'll simulate processing each entry
+    for (const entry of entries) {
+      const foodLog: DailyFoodLog = {
+        breakfast: entry.breakfast,
+        lunch: entry.lunch,
+        dinner: entry.dinner,
+        snacks: entry.snacks
+      };
+
+      // Process each entry through the AI analysis
+      await handleDailyLogSubmit(foodLog);
+    }
+
+    return Promise.resolve();
+  };
+
+  const handleShowBulkCollection = () => {
+    setShowBulkCollection(true);
+    setShowLandingPage(false);
   };
 
   const handleViewProfessionalReport = () => {
@@ -590,6 +617,19 @@ const App: React.FC = () => {
     return <AdminLogin onLogin={handleAdminLogin} onBackToMain={handleBackToMainFromAdmin} />;
   }
 
+  // Show bulk data collection
+  if (showBulkCollection) {
+    return (
+      <BulkDataCollection
+        onSubmit={handleBulkDataSubmission}
+        onClose={() => {
+          setShowBulkCollection(false);
+          setShowLandingPage(true);
+        }}
+      />
+    );
+  }
+
   // Show organization registration
   if (showOrgRegistration) {
     return (
@@ -647,6 +687,7 @@ const App: React.FC = () => {
             onNutritionistLogin={handleSwitchToNutritionistLogin}
             onAdminLogin={handleSwitchToAdminLogin}
             onPartnerRegistration={handleShowOrgRegistration}
+            onBulkCollection={handleShowBulkCollection}
           />
         </main>
         <Footer />

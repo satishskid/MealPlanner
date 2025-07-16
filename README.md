@@ -199,23 +199,13 @@ VITE_NETLIFY_SITE_URL=your_netlify_site_url
 
 ## 🧪 Testing
 
-### Demo Credentials
-```
-# Super Admin
-Email: admin@nutreeai.com
-Password: admin2024
-MFA Code: 123456
+### Demo Access
+Demo credentials are available for authorized developers and stakeholders. Please contact the development team for access to:
+- Super Admin dashboard
+- Manager interface
+- Nutritionist review system
 
-# Manager
-Email: manager@nutreeai.com
-Password: manager2024
-MFA Code: 123456
-
-# Nutritionist
-Email: nutritionist@nutreeai.com
-Password: nutree2024
-Access Code: NUTREE_PRO
-```
+**Note**: Production system will use secure authentication with organization-specific credentials.
 
 ## 📈 Analytics & Monitoring
 
