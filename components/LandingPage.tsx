@@ -3,9 +3,10 @@ import React from 'react';
 interface LandingPageProps {
   onGetStarted: () => void;
   onNutritionistLogin?: () => void;
+  onAdminLogin?: () => void;
 }
 
-const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onNutritionistLogin }) => {
+const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onNutritionistLogin, onAdminLogin }) => {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       {/* Hero Section */}
@@ -31,6 +32,14 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onNutritionistL
               className="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-colors shadow-lg border-2 border-white/20"
             >
               Professional Login
+            </button>
+          )}
+          {onAdminLogin && (
+            <button
+              onClick={onAdminLogin}
+              className="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold text-sm hover:bg-red-700 transition-colors shadow-lg border-2 border-white/20"
+            >
+              Admin Portal
             </button>
           )}
         </div>

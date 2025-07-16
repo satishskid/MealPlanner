@@ -5,6 +5,10 @@ import Footer from './components/Footer';
 import LandingPage from './components/LandingPage';
 import NutritionistLogin from './components/NutritionistLogin';
 import NutritionistDashboard from './components/NutritionistDashboard';
+import AdminLogin from './components/AdminLogin';
+import AdminDashboard from './components/AdminDashboard';
+import NutritionistManagement from './components/NutritionistManagement';
+import AssignmentManagement from './components/AssignmentManagement';
 import PatientStatusTracker from './components/PatientStatusTracker';
 import ProfessionalReport from './components/ProfessionalReport';
 import FoodInput from './components/FoodInput';
@@ -21,7 +25,7 @@ import SettingsPanel from './components/SettingsPanel'; // Ensured relative path
 import {
   CalorieInfo, GroundingMetadata, AppMode, UserRole, UserProfile, DailyFoodLog,
   DailyMealAnalysis, MealPlan, NutritionistViewData, AdherenceLog, DailyAdherence,
-  AppSettings, NutritionistProfile, PatientCase /*ThemeOption, DoctorProfile*/
+  AppSettings, NutritionistProfile, PatientCase, AdminProfile /*ThemeOption, DoctorProfile*/
 } from './types';
 import { fetchCalorieInfo, analyzeDailyIntake, suggestMealPlans } from './services/geminiService';
 import { 
@@ -54,8 +58,11 @@ const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [userRole, setUserRole] = useState<UserRole>('patient');
   const [nutritionist, setNutritionist] = useState<NutritionistProfile | null>(null);
+  const [admin, setAdmin] = useState<AdminProfile | null>(null);
   const [showLandingPage, setShowLandingPage] = useState<boolean>(true);
   const [showNutritionistLogin, setShowNutritionistLogin] = useState<boolean>(false);
+  const [showAdminLogin, setShowAdminLogin] = useState<boolean>(false);
+  const [adminView, setAdminView] = useState<'dashboard' | 'nutritionists' | 'assignments'>('dashboard');
   const [apiKeyStatus, setApiKeyStatus] = useState<string>(API_KEY_CHECK_MSG);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -215,6 +222,30 @@ const App: React.FC = () => {
 
   const handleBackToPatientPortal = () => {
     setShowNutritionistLogin(false);
+    setShowLandingPage(true);
+  };
+
+  const handleAdminLogin = (adminProfile: AdminProfile) => {
+    setAdmin(adminProfile);
+    setUserRole('admin');
+    setShowAdminLogin(false);
+    setShowLandingPage(false);
+  };
+
+  const handleAdminLogout = () => {
+    setAdmin(null);
+    setUserRole('patient');
+    setShowLandingPage(true);
+    setAdminView('dashboard');
+  };
+
+  const handleSwitchToAdminLogin = () => {
+    setShowAdminLogin(true);
+    setShowLandingPage(false);
+  };
+
+  const handleBackToMainFromAdmin = () => {
+    setShowAdminLogin(false);
     setShowLandingPage(true);
   };
 
@@ -426,9 +457,67 @@ const App: React.FC = () => {
     );
   }
 
+  // Show admin dashboard if logged in as admin
+  if (userRole === 'admin' && admin) {
+    if (adminView === 'nutritionists') {
+      return (
+        <div className="min-h-screen bg-gray-50">
+          <div className="bg-white shadow-sm border-b p-4">
+            <div className="max-w-7xl mx-auto flex justify-between items-center">
+              <button
+                onClick={() => setAdminView('dashboard')}
+                className="text-blue-600 hover:text-blue-800"
+              >
+                ← Back to Dashboard
+              </button>
+              <button
+                onClick={handleAdminLogout}
+                className="bg-red-600 text-white px-4 py-2 rounded-lg text-sm"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+          <NutritionistManagement onClose={() => setAdminView('dashboard')} />
+        </div>
+      );
+    }
+
+    if (adminView === 'assignments') {
+      return (
+        <div className="min-h-screen bg-gray-50">
+          <div className="bg-white shadow-sm border-b p-4">
+            <div className="max-w-7xl mx-auto flex justify-between items-center">
+              <button
+                onClick={() => setAdminView('dashboard')}
+                className="text-blue-600 hover:text-blue-800"
+              >
+                ← Back to Dashboard
+              </button>
+              <button
+                onClick={handleAdminLogout}
+                className="bg-red-600 text-white px-4 py-2 rounded-lg text-sm"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+          <AssignmentManagement onClose={() => setAdminView('dashboard')} />
+        </div>
+      );
+    }
+
+    return <AdminDashboard admin={admin} onLogout={handleAdminLogout} onNavigate={setAdminView} />;
+  }
+
   // Show nutritionist dashboard if logged in as nutritionist
   if (userRole === 'nutritionist' && nutritionist) {
     return <NutritionistDashboard nutritionist={nutritionist} onLogout={handleNutritionistLogout} />;
+  }
+
+  // Show admin login page
+  if (showAdminLogin) {
+    return <AdminLogin onLogin={handleAdminLogin} onBackToMain={handleBackToMainFromAdmin} />;
   }
 
   // Show nutritionist login page
@@ -442,7 +531,11 @@ const App: React.FC = () => {
       <div className="min-h-screen flex flex-col bg-gradient-to-br from-green-400 via-teal-400 to-blue-500">
         <Header clinicName={appSettings.clinicName} onToggleSettings={() => setShowSettingsPanel(true)} userEmail={user?.email} onLogout={handleLogoutClick} />
         <main className="flex-grow">
-          <LandingPage onGetStarted={handleGetStarted} onNutritionistLogin={handleSwitchToNutritionistLogin} />
+          <LandingPage
+            onGetStarted={handleGetStarted}
+            onNutritionistLogin={handleSwitchToNutritionistLogin}
+            onAdminLogin={handleSwitchToAdminLogin}
+          />
         </main>
         <Footer />
       </div>

@@ -32,7 +32,10 @@ export interface GroundingMetadata {
 
 // New types for Daily Meal Planner
 export type AppMode = 'singleChecker' | 'dailyPlanner';
-export type UserRole = 'patient' | 'nutritionist';
+export type UserRole = 'patient' | 'nutritionist' | 'admin';
+export type NutritionistSpecialization = 'clinical' | 'sports' | 'pediatric' | 'geriatric' | 'weight_management' | 'diabetes' | 'cultural_cuisine' | 'general';
+export type CaseStatus = 'submitted' | 'assigned' | 'under_review' | 'reviewed' | 'delivered' | 'escalated';
+export type CasePriority = 'low' | 'normal' | 'high' | 'urgent';
 
 export interface UserProfile {
   ageGroup: string;
@@ -152,14 +155,34 @@ export interface AppSettings {
   mcpServerUrl: string;
 }
 
-// Nutritionist-specific types
+// Enhanced Nutritionist Profile
 export interface NutritionistProfile {
   id: string;
   name: string;
+  email: string;
   credentials: string; // e.g., "RD, MS", "PhD in Nutrition"
-  specialization: string; // e.g., "Clinical Nutrition", "Sports Nutrition"
+  specializations: NutritionistSpecialization[];
   licenseNumber?: string;
   yearsOfExperience: number;
+  languages: string[];
+  culturalExpertise: string[]; // e.g., ["North Indian", "Mediterranean", "Vegan"]
+  maxCasesPerDay: number;
+  currentCaseLoad: number;
+  isActive: boolean;
+  isAvailable: boolean;
+  timezone: string;
+  workingHours: {
+    start: string; // "09:00"
+    end: string;   // "17:00"
+    days: string[]; // ["Monday", "Tuesday", ...]
+  };
+  rating: number; // 1-5 stars
+  totalCasesCompleted: number;
+  averageReviewTime: number; // in hours
+  createdAt: string;
+  lastActiveAt: string;
+  bio?: string;
+  profileImage?: string;
 }
 
 export interface NutritionistReview {
@@ -181,10 +204,17 @@ export interface PatientCase {
   dailyFoodLog: DailyFoodLog;
   aiAnalysis: DailyMealAnalysis;
   nutritionistReview?: NutritionistReview;
+  assignedNutritionistId?: string;
+  assignedAt?: string;
   createdAt: string;
   reviewedAt?: string;
-  status: 'submitted' | 'under_review' | 'reviewed' | 'delivered';
-  priority: 'normal' | 'urgent';
+  deliveredAt?: string;
+  status: CaseStatus;
+  priority: CasePriority;
+  estimatedReviewTime?: number; // in hours
+  actualReviewTime?: number; // in hours
+  escalationReason?: string;
+  tags?: string[];
 }
 
 export interface BulkUploadData {
@@ -198,8 +228,133 @@ export interface BulkUploadData {
 
 export interface PatientStatus {
   caseId: string;
-  status: 'submitted' | 'under_review' | 'reviewed' | 'delivered';
+  status: CaseStatus;
   submittedAt: string;
   estimatedReviewTime?: string;
   nutritionistAssigned?: string;
+}
+
+// Admin Management Types
+export interface AdminProfile {
+  id: string;
+  name: string;
+  email: string;
+  role: 'super_admin' | 'admin' | 'manager';
+  permissions: AdminPermission[];
+  createdAt: string;
+  lastLoginAt: string;
+  isActive: boolean;
+}
+
+export type AdminPermission =
+  | 'manage_nutritionists'
+  | 'manage_patients'
+  | 'view_analytics'
+  | 'manage_assignments'
+  | 'system_settings'
+  | 'bulk_operations'
+  | 'financial_reports'
+  | 'audit_logs';
+
+// Assignment Algorithm Types
+export interface AssignmentCriteria {
+  specialization?: NutritionistSpecialization;
+  culturalExpertise?: string;
+  language?: string;
+  maxCaseLoad?: number;
+  priority?: CasePriority;
+  timezone?: string;
+}
+
+export interface AssignmentResult {
+  nutritionistId: string;
+  score: number;
+  reason: string;
+  estimatedReviewTime: number;
+}
+
+// System Analytics Types
+export interface SystemAnalytics {
+  totalPatients: number;
+  totalNutritionists: number;
+  totalCases: number;
+  casesThisMonth: number;
+  averageReviewTime: number;
+  nutritionistUtilization: number;
+  patientSatisfaction: number;
+  casesByStatus: Record<CaseStatus, number>;
+  casesByPriority: Record<CasePriority, number>;
+  topPerformingNutritionists: NutritionistPerformance[];
+  revenueMetrics?: RevenueMetrics;
+}
+
+export interface NutritionistPerformance {
+  nutritionistId: string;
+  name: string;
+  casesCompleted: number;
+  averageRating: number;
+  averageReviewTime: number;
+  utilizationRate: number;
+}
+
+export interface RevenueMetrics {
+  monthlyRevenue: number;
+  revenuePerCase: number;
+  projectedRevenue: number;
+  paymentsPending: number;
+}
+
+// Notification Types
+export interface NotificationTemplate {
+  id: string;
+  type: 'case_assigned' | 'case_completed' | 'case_escalated' | 'reminder' | 'welcome';
+  channel: 'email' | 'sms' | 'in_app';
+  subject: string;
+  template: string;
+  variables: string[];
+}
+
+export interface Notification {
+  id: string;
+  recipientId: string;
+  recipientType: UserRole;
+  type: string;
+  title: string;
+  message: string;
+  isRead: boolean;
+  createdAt: string;
+  scheduledFor?: string;
+}
+
+// Audit and Compliance Types
+export interface AuditLog {
+  id: string;
+  userId: string;
+  userRole: UserRole;
+  action: string;
+  resource: string;
+  resourceId: string;
+  details: Record<string, any>;
+  timestamp: string;
+  ipAddress?: string;
+}
+
+export interface ComplianceReport {
+  id: string;
+  type: 'hipaa' | 'gdpr' | 'data_retention' | 'security_audit';
+  generatedAt: string;
+  period: {
+    start: string;
+    end: string;
+  };
+  findings: ComplianceFinding[];
+  status: 'compliant' | 'issues_found' | 'critical';
+}
+
+export interface ComplianceFinding {
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  category: string;
+  description: string;
+  recommendation: string;
+  affectedRecords?: number;
 }
