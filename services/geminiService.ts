@@ -117,32 +117,50 @@ Return the information strictly as a JSON object with the following structure. D
   }
 };
 
+// Helper function to extract meal text from MealEntry or string
+const getMealText = (meal: string | any): string => {
+  if (typeof meal === 'string') {
+    return meal;
+  }
+  if (meal && typeof meal === 'object' && meal.rawText) {
+    return meal.rawText;
+  }
+  return "Not specified";
+};
+
 export const analyzeDailyIntake = async (
   profile: UserProfile,
   log: DailyFoodLog
 ): Promise<DailyMealAnalysis> => {
   const client = getAiClient();
+
+  // Extract meal texts, handling both string and MealEntry formats
+  const breakfastText = getMealText(log.breakfast);
+  const lunchText = getMealText(log.lunch);
+  const dinnerText = getMealText(log.dinner);
+  const snacksText = getMealText(log.snacks);
+
   const prompt = `
 Analyze the daily food intake for a user with the following profile:
 Age Group: ${profile.ageGroup}
 Cuisine Preference: ${profile.cuisinePreference}
 
-Food Log (Note: "item A OR item B" means the user consumes one of these options):
-Breakfast: ${log.breakfast || "Not specified"}
-Lunch: ${log.lunch || "Not specified"}
-Dinner: ${log.dinner || "Not specified"}
-Snacks: ${log.snacks || "Not specified"}
+Food Log (Note: "item A OR item B" means the user has alternatives and may consume one of these options on different days. "item A AND item B" means they consume both items together):
+Breakfast: ${breakfastText || "Not specified"}
+Lunch: ${lunchText || "Not specified"}
+Dinner: ${dinnerText || "Not specified"}
+Snacks: ${snacksText || "Not specified"}
 
 Please provide:
 1.  An estimated total daily calorie intake (as a string, e.g., "2000-2200 kcal" or "Approx. 1800 kcal").
-2.  A general nutritional quality assessment.
+2.  A general nutritional quality assessment that considers the variety and flexibility in their food choices.
 3.  A breakdown for each meal (Breakfast, Lunch, Dinner, Snacks), detailing:
-    *   Your interpretation of the food items eaten (if "OR" options are given, acknowledge them or pick the most representative for analysis).
-    *   Optionally, an estimated calorie range for that meal.
-    *   Any specific notes or observations about that meal.
-4.  General recommendations for improvement based on their profile and intake.
-5.  A brief, culturally relevant (based on cuisine preference: ${profile.cuisinePreference}) motivational message for the user.
-6.  A brief, culturally relevant (based on cuisine preference: ${profile.cuisinePreference}) educative tip for the user.
+    *   Your interpretation of the food items eaten. For "OR" options, acknowledge the variety and analyze the nutritional range. For "AND" combinations, analyze the complete meal.
+    *   Estimated calorie range for that meal (consider ranges for OR options).
+    *   Specific notes about nutritional balance, variety, and cultural appropriateness.
+4.  General recommendations that embrace their food variety and suggest improvements while respecting their choices.
+5.  A brief, culturally relevant (based on cuisine preference: ${profile.cuisinePreference}) motivational message that celebrates their food diversity.
+6.  A brief, culturally relevant (based on cuisine preference: ${profile.cuisinePreference}) educative tip about optimizing their varied food choices.
 
 Return the information strictly as a JSON object with the following structure. Ensure all string values are appropriately escaped. Do not include any explanatory text or markdown.
 {

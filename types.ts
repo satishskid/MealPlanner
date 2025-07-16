@@ -39,11 +39,21 @@ export interface UserProfile {
   cuisinePreference: string;
 }
 
+export interface FoodItem {
+  name: string;
+  operator?: 'AND' | 'OR';
+}
+
+export interface MealEntry {
+  items: FoodItem[];
+  rawText: string; // For backward compatibility and display
+}
+
 export interface DailyFoodLog {
-  breakfast: string;
-  lunch: string;
-  dinner: string;
-  snacks: string;
+  breakfast: string | MealEntry;
+  lunch: string | MealEntry;
+  dinner: string | MealEntry;
+  snacks: string | MealEntry;
 }
 
 export interface MealBreakdown {

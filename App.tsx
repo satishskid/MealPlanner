@@ -13,6 +13,7 @@ import LoadingSpinner from './components/LoadingSpinner';
 import ErrorDisplay from './components/ErrorDisplay';
 import UserProfileInput from './components/UserProfileInput';
 import DailyMealInput from './components/DailyMealInput';
+import FlexibleMealInput from './components/FlexibleMealInput';
 import DailyMealSummaryDisplay from './components/DailyMealSummaryDisplay';
 import NutritionistView from './components/NutritionistView';
 import ActiveMealPlanView from './components/ActiveMealPlanView';
@@ -535,7 +536,7 @@ const App: React.FC = () => {
                   {!selectedMealPlan ? ( 
                     <>
                       {!dailyMealAnalysis ? (
-                        <DailyMealInput onSubmit={handleDailyLogSubmit} isLoading={isLoading} profileSet={!!userProfile} />
+                        <FlexibleMealInput onSubmit={handleDailyLogSubmit} isLoading={isLoading} profileSet={!!userProfile} />
                       ) : currentPatientCase ? (
                         <PatientStatusTracker
                           patientCase={currentPatientCase}

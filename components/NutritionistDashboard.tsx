@@ -14,6 +14,12 @@ const NutritionistDashboard: React.FC<NutritionistDashboardProps> = ({ nutrition
   const [approvalStatus, setApprovalStatus] = useState<'approved' | 'modified' | 'needs_revision'>('approved');
   const [showBulkUpload, setShowBulkUpload] = useState(false);
 
+  // Editable AI recommendations
+  const [editedGeneralRecommendations, setEditedGeneralRecommendations] = useState('');
+  const [editedMotivationalMessage, setEditedMotivationalMessage] = useState('');
+  const [editedEducativeTip, setEditedEducativeTip] = useState('');
+  const [editedQualityAssessment, setEditedQualityAssessment] = useState('');
+
   // Demo patient cases
   const [patientCases, setPatientCases] = useState<PatientCase[]>([
     {
@@ -47,6 +53,20 @@ const NutritionistDashboard: React.FC<NutritionistDashboardProps> = ({ nutrition
     }
   ]);
 
+  const handleCaseSelection = (case_: PatientCase) => {
+    setSelectedCase(case_);
+    // Populate editable fields with original AI analysis
+    setEditedGeneralRecommendations(case_.aiAnalysis.generalRecommendations || '');
+    setEditedMotivationalMessage(case_.aiAnalysis.motivationalMessage || '');
+    setEditedEducativeTip(case_.aiAnalysis.educativeTip || '');
+    setEditedQualityAssessment(case_.aiAnalysis.qualityAssessment || '');
+
+    // Clear review form
+    setReviewNotes('');
+    setRecommendations('');
+    setApprovalStatus('approved');
+  };
+
   const handleReviewSubmit = () => {
     if (!selectedCase) return;
 
@@ -56,7 +76,13 @@ const NutritionistDashboard: React.FC<NutritionistDashboardProps> = ({ nutrition
       reviewDate: new Date().toISOString(),
       professionalNotes: reviewNotes,
       recommendations: recommendations,
-      approvalStatus: approvalStatus
+      approvalStatus: approvalStatus,
+      modifiedAnalysis: {
+        generalRecommendations: editedGeneralRecommendations,
+        motivationalMessage: editedMotivationalMessage,
+        educativeTip: editedEducativeTip,
+        qualityAssessment: editedQualityAssessment
+      }
     };
 
     // Update the case with the review
@@ -71,6 +97,10 @@ const NutritionistDashboard: React.FC<NutritionistDashboardProps> = ({ nutrition
     setReviewNotes('');
     setRecommendations('');
     setApprovalStatus('approved');
+    setEditedGeneralRecommendations('');
+    setEditedMotivationalMessage('');
+    setEditedEducativeTip('');
+    setEditedQualityAssessment('');
   };
 
   const handleBulkUploadComplete = (bulkData: BulkUploadData) => {
@@ -149,7 +179,7 @@ const NutritionistDashboard: React.FC<NutritionistDashboardProps> = ({ nutrition
                       AI Analysis: {case_.aiAnalysis.totalEstimatedCalories}
                     </p>
                     <button
-                      onClick={() => setSelectedCase(case_)}
+                      onClick={() => handleCaseSelection(case_)}
                       className="bg-yellow-300 text-blue-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-yellow-200 transition-colors"
                     >
                       Review Case
@@ -185,7 +215,7 @@ const NutritionistDashboard: React.FC<NutritionistDashboardProps> = ({ nutrition
                       </span>
                     </div>
                     <button
-                      onClick={() => setSelectedCase(case_)}
+                      onClick={() => handleCaseSelection(case_)}
                       className="bg-white/20 text-white px-4 py-2 rounded-lg text-sm hover:bg-white/30 transition-colors"
                     >
                       View Details
@@ -224,19 +254,74 @@ const NutritionistDashboard: React.FC<NutritionistDashboardProps> = ({ nutrition
                 <div className="bg-white/10 rounded-lg p-4">
                   <h3 className="text-lg font-semibold text-white mb-2">Daily Food Log</h3>
                   <div className="space-y-2 text-white/80">
-                    <p><strong>Breakfast:</strong> {selectedCase.dailyFoodLog.breakfast}</p>
-                    <p><strong>Lunch:</strong> {selectedCase.dailyFoodLog.lunch}</p>
-                    <p><strong>Dinner:</strong> {selectedCase.dailyFoodLog.dinner}</p>
-                    <p><strong>Snacks:</strong> {selectedCase.dailyFoodLog.snacks}</p>
+                    <p><strong>Breakfast:</strong> {
+                      typeof selectedCase.dailyFoodLog.breakfast === 'string'
+                        ? selectedCase.dailyFoodLog.breakfast
+                        : selectedCase.dailyFoodLog.breakfast?.rawText || 'Not specified'
+                    }</p>
+                    <p><strong>Lunch:</strong> {
+                      typeof selectedCase.dailyFoodLog.lunch === 'string'
+                        ? selectedCase.dailyFoodLog.lunch
+                        : selectedCase.dailyFoodLog.lunch?.rawText || 'Not specified'
+                    }</p>
+                    <p><strong>Dinner:</strong> {
+                      typeof selectedCase.dailyFoodLog.dinner === 'string'
+                        ? selectedCase.dailyFoodLog.dinner
+                        : selectedCase.dailyFoodLog.dinner?.rawText || 'Not specified'
+                    }</p>
+                    <p><strong>Snacks:</strong> {
+                      typeof selectedCase.dailyFoodLog.snacks === 'string'
+                        ? selectedCase.dailyFoodLog.snacks
+                        : selectedCase.dailyFoodLog.snacks?.rawText || 'Not specified'
+                    }</p>
                   </div>
                 </div>
 
                 <div className="bg-white/10 rounded-lg p-4">
-                  <h3 className="text-lg font-semibold text-white mb-2">AI Analysis</h3>
-                  <div className="space-y-2 text-white/80 text-sm">
-                    <p><strong>Total Calories:</strong> {selectedCase.aiAnalysis.totalEstimatedCalories}</p>
-                    <p><strong>Quality Assessment:</strong> {selectedCase.aiAnalysis.qualityAssessment}</p>
-                    <p><strong>Recommendations:</strong> {selectedCase.aiAnalysis.generalRecommendations}</p>
+                  <h3 className="text-lg font-semibold text-white mb-2">Complete AI Analysis</h3>
+                  <div className="space-y-3 text-white/80 text-sm">
+                    <div>
+                      <p><strong>Total Calories:</strong> {selectedCase.aiAnalysis.totalEstimatedCalories}</p>
+                    </div>
+
+                    <div>
+                      <p><strong>Quality Assessment:</strong></p>
+                      <p className="mt-1 bg-white/10 p-2 rounded text-xs">{selectedCase.aiAnalysis.qualityAssessment}</p>
+                    </div>
+
+                    {/* Detailed Meal Breakdown */}
+                    {selectedCase.aiAnalysis.mealBreakdown && selectedCase.aiAnalysis.mealBreakdown.length > 0 && (
+                      <div>
+                        <p><strong>Meal Breakdown:</strong></p>
+                        <div className="mt-1 space-y-1">
+                          {selectedCase.aiAnalysis.mealBreakdown.map((meal, index) => (
+                            <div key={index} className="bg-white/10 p-2 rounded text-xs">
+                              <div className="flex justify-between items-start mb-1">
+                                <strong>{meal.meal}</strong>
+                                <span className="text-yellow-300">{meal.estimatedCalories}</span>
+                              </div>
+                              <p className="text-white/70 mb-1">{meal.items}</p>
+                              <p className="text-white/60">{meal.notes}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div>
+                      <p><strong>General Recommendations:</strong></p>
+                      <p className="mt-1 bg-white/10 p-2 rounded text-xs">{selectedCase.aiAnalysis.generalRecommendations}</p>
+                    </div>
+
+                    <div>
+                      <p><strong>Motivational Message:</strong></p>
+                      <p className="mt-1 bg-white/10 p-2 rounded text-xs">{selectedCase.aiAnalysis.motivationalMessage}</p>
+                    </div>
+
+                    <div>
+                      <p><strong>Educational Tip:</strong></p>
+                      <p className="mt-1 bg-white/10 p-2 rounded text-xs">{selectedCase.aiAnalysis.educativeTip}</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -245,9 +330,69 @@ const NutritionistDashboard: React.FC<NutritionistDashboardProps> = ({ nutrition
               <div className="space-y-4">
                 {selectedCase.status === 'pending_review' ? (
                   <>
+                    {/* Editable AI Recommendations */}
+                    <div className="bg-white/10 rounded-lg p-4">
+                      <h3 className="text-lg font-semibold text-white mb-2">Review & Edit AI Analysis</h3>
+                      <p className="text-white/70 text-sm mb-4">Modify the AI-generated recommendations as needed:</p>
+
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-white text-sm font-medium mb-2">
+                            Quality Assessment
+                          </label>
+                          <textarea
+                            value={editedQualityAssessment}
+                            onChange={(e) => setEditedQualityAssessment(e.target.value)}
+                            className="w-full px-3 py-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+                            rows={2}
+                            placeholder="Edit quality assessment..."
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-white text-sm font-medium mb-2">
+                            General Recommendations
+                          </label>
+                          <textarea
+                            value={editedGeneralRecommendations}
+                            onChange={(e) => setEditedGeneralRecommendations(e.target.value)}
+                            className="w-full px-3 py-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+                            rows={3}
+                            placeholder="Edit general recommendations..."
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-white text-sm font-medium mb-2">
+                            Motivational Message
+                          </label>
+                          <textarea
+                            value={editedMotivationalMessage}
+                            onChange={(e) => setEditedMotivationalMessage(e.target.value)}
+                            className="w-full px-3 py-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+                            rows={2}
+                            placeholder="Edit motivational message..."
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-white text-sm font-medium mb-2">
+                            Educational Tip
+                          </label>
+                          <textarea
+                            value={editedEducativeTip}
+                            onChange={(e) => setEditedEducativeTip(e.target.value)}
+                            className="w-full px-3 py-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+                            rows={2}
+                            placeholder="Edit educational tip..."
+                          />
+                        </div>
+                      </div>
+                    </div>
+
                     <div className="bg-white/10 rounded-lg p-4">
                       <h3 className="text-lg font-semibold text-white mb-2">Professional Review</h3>
-                      
+
                       <div className="space-y-4">
                         <div>
                           <label className="block text-white text-sm font-medium mb-2">

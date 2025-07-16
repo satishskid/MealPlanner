@@ -84,21 +84,37 @@ const ProfessionalReport: React.FC<ProfessionalReportProps> = ({
               <div className="space-y-2">
                 <div>
                   <strong className="text-blue-700">Breakfast:</strong>
-                  <p className="text-gray-700 text-sm">{dailyFoodLog.breakfast}</p>
+                  <p className="text-gray-700 text-sm">
+                    {typeof dailyFoodLog.breakfast === 'string'
+                      ? dailyFoodLog.breakfast
+                      : dailyFoodLog.breakfast?.rawText || 'Not specified'}
+                  </p>
                 </div>
                 <div>
                   <strong className="text-blue-700">Lunch:</strong>
-                  <p className="text-gray-700 text-sm">{dailyFoodLog.lunch}</p>
+                  <p className="text-gray-700 text-sm">
+                    {typeof dailyFoodLog.lunch === 'string'
+                      ? dailyFoodLog.lunch
+                      : dailyFoodLog.lunch?.rawText || 'Not specified'}
+                  </p>
                 </div>
               </div>
               <div className="space-y-2">
                 <div>
                   <strong className="text-blue-700">Dinner:</strong>
-                  <p className="text-gray-700 text-sm">{dailyFoodLog.dinner}</p>
+                  <p className="text-gray-700 text-sm">
+                    {typeof dailyFoodLog.dinner === 'string'
+                      ? dailyFoodLog.dinner
+                      : dailyFoodLog.dinner?.rawText || 'Not specified'}
+                  </p>
                 </div>
                 <div>
                   <strong className="text-blue-700">Snacks:</strong>
-                  <p className="text-gray-700 text-sm">{dailyFoodLog.snacks}</p>
+                  <p className="text-gray-700 text-sm">
+                    {typeof dailyFoodLog.snacks === 'string'
+                      ? dailyFoodLog.snacks
+                      : dailyFoodLog.snacks?.rawText || 'Not specified'}
+                  </p>
                 </div>
               </div>
             </div>
@@ -164,24 +180,51 @@ const ProfessionalReport: React.FC<ProfessionalReportProps> = ({
             </div>
           )}
 
-          {/* AI Recommendations */}
+          {/* Enhanced Recommendations (AI + Nutritionist Modifications) */}
           <div className="bg-yellow-50 rounded-lg p-4">
-            <h3 className="text-lg font-semibold text-gray-800 mb-3">Additional Insights</h3>
-            
+            <h3 className="text-lg font-semibold text-gray-800 mb-3">
+              {nutritionistReview?.modifiedAnalysis ? 'Professionally Enhanced Insights' : 'AI-Generated Insights'}
+            </h3>
+
             <div className="space-y-3">
               <div>
+                <strong className="text-yellow-700">Quality Assessment:</strong>
+                <p className="text-gray-700 text-sm mt-1">
+                  {nutritionistReview?.modifiedAnalysis?.qualityAssessment || aiAnalysis.qualityAssessment}
+                </p>
+                {nutritionistReview?.modifiedAnalysis?.qualityAssessment && (
+                  <span className="text-xs text-green-600 font-medium">✓ Professionally Modified</span>
+                )}
+              </div>
+
+              <div>
                 <strong className="text-yellow-700">General Recommendations:</strong>
-                <p className="text-gray-700 text-sm mt-1">{aiAnalysis.generalRecommendations}</p>
+                <p className="text-gray-700 text-sm mt-1">
+                  {nutritionistReview?.modifiedAnalysis?.generalRecommendations || aiAnalysis.generalRecommendations}
+                </p>
+                {nutritionistReview?.modifiedAnalysis?.generalRecommendations && (
+                  <span className="text-xs text-green-600 font-medium">✓ Professionally Modified</span>
+                )}
               </div>
 
               <div>
                 <strong className="text-yellow-700">Cultural Insight:</strong>
-                <p className="text-gray-700 text-sm mt-1">{aiAnalysis.motivationalMessage}</p>
+                <p className="text-gray-700 text-sm mt-1">
+                  {nutritionistReview?.modifiedAnalysis?.motivationalMessage || aiAnalysis.motivationalMessage}
+                </p>
+                {nutritionistReview?.modifiedAnalysis?.motivationalMessage && (
+                  <span className="text-xs text-green-600 font-medium">✓ Professionally Modified</span>
+                )}
               </div>
 
               <div>
                 <strong className="text-yellow-700">Educational Tip:</strong>
-                <p className="text-gray-700 text-sm mt-1">{aiAnalysis.educativeTip}</p>
+                <p className="text-gray-700 text-sm mt-1">
+                  {nutritionistReview?.modifiedAnalysis?.educativeTip || aiAnalysis.educativeTip}
+                </p>
+                {nutritionistReview?.modifiedAnalysis?.educativeTip && (
+                  <span className="text-xs text-green-600 font-medium">✓ Professionally Modified</span>
+                )}
               </div>
             </div>
           </div>
