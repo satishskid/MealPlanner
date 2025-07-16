@@ -2,9 +2,10 @@ import React from 'react';
 
 interface LandingPageProps {
   onGetStarted: () => void;
+  onNutritionistLogin?: () => void;
 }
 
-const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
+const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onNutritionistLogin }) => {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       {/* Hero Section */}
@@ -17,12 +18,22 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
           Move beyond diet fads and food myths. Discover what you're really eating with 
           evidence-based nutritional science tailored to your cultural preferences.
         </p>
-        <button 
-          onClick={onGetStarted}
-          className="bg-white text-green-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors shadow-lg"
-        >
-          Start Your Nutrition Journey
-        </button>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <button
+            onClick={onGetStarted}
+            className="bg-white text-green-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors shadow-lg"
+          >
+            Start Your Nutrition Journey
+          </button>
+          {onNutritionistLogin && (
+            <button
+              onClick={onNutritionistLogin}
+              className="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-colors shadow-lg border-2 border-white/20"
+            >
+              Professional Login
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Main Content */}

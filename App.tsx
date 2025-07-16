@@ -3,6 +3,10 @@ import netlifyIdentity, { User } from 'netlify-identity-widget';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import LandingPage from './components/LandingPage';
+import NutritionistLogin from './components/NutritionistLogin';
+import NutritionistDashboard from './components/NutritionistDashboard';
+import PatientStatusTracker from './components/PatientStatusTracker';
+import ProfessionalReport from './components/ProfessionalReport';
 import FoodInput from './components/FoodInput';
 import CalorieDisplay from './components/CalorieDisplay';
 import LoadingSpinner from './components/LoadingSpinner';
@@ -13,10 +17,10 @@ import DailyMealSummaryDisplay from './components/DailyMealSummaryDisplay';
 import NutritionistView from './components/NutritionistView';
 import ActiveMealPlanView from './components/ActiveMealPlanView';
 import SettingsPanel from './components/SettingsPanel'; // Ensured relative path
-import { 
-  CalorieInfo, GroundingMetadata, AppMode, UserProfile, DailyFoodLog, 
+import {
+  CalorieInfo, GroundingMetadata, AppMode, UserRole, UserProfile, DailyFoodLog,
   DailyMealAnalysis, MealPlan, NutritionistViewData, AdherenceLog, DailyAdherence,
-  AppSettings /*ThemeOption, DoctorProfile*/
+  AppSettings, NutritionistProfile, PatientCase /*ThemeOption, DoctorProfile*/
 } from './types';
 import { fetchCalorieInfo, analyzeDailyIntake, suggestMealPlans } from './services/geminiService';
 import { 
@@ -47,7 +51,10 @@ interface SingleFoodSearchPayload {
 
 const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [userRole, setUserRole] = useState<UserRole>('patient');
+  const [nutritionist, setNutritionist] = useState<NutritionistProfile | null>(null);
   const [showLandingPage, setShowLandingPage] = useState<boolean>(true);
+  const [showNutritionistLogin, setShowNutritionistLogin] = useState<boolean>(false);
   const [apiKeyStatus, setApiKeyStatus] = useState<string>(API_KEY_CHECK_MSG);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -73,6 +80,10 @@ const App: React.FC = () => {
   // State for Settings
   const [appSettings, setAppSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
   const [showSettingsPanel, setShowSettingsPanel] = useState<boolean>(false);
+
+  // State for Patient Case Tracking
+  const [currentPatientCase, setCurrentPatientCase] = useState<PatientCase | null>(null);
+  const [showProfessionalReport, setShowProfessionalReport] = useState<boolean>(false);
 
 
   const applyTheme = useCallback((themeName: string) => {
@@ -183,6 +194,37 @@ const App: React.FC = () => {
     setShowLandingPage(false);
   };
 
+  const handleNutritionistLogin = (nutritionistProfile: NutritionistProfile) => {
+    setNutritionist(nutritionistProfile);
+    setUserRole('nutritionist');
+    setShowNutritionistLogin(false);
+    setShowLandingPage(false);
+  };
+
+  const handleNutritionistLogout = () => {
+    setNutritionist(null);
+    setUserRole('patient');
+    setShowLandingPage(true);
+  };
+
+  const handleSwitchToNutritionistLogin = () => {
+    setShowNutritionistLogin(true);
+    setShowLandingPage(false);
+  };
+
+  const handleBackToPatientPortal = () => {
+    setShowNutritionistLogin(false);
+    setShowLandingPage(true);
+  };
+
+  const handleViewProfessionalReport = () => {
+    setShowProfessionalReport(true);
+  };
+
+  const handleCloseProfessionalReport = () => {
+    setShowProfessionalReport(false);
+  };
+
   const handleSaveSettings = (newSettings: AppSettings) => {
     // Ensure API key display is always from env, not user input affecting this specific display
     newSettings.apiKeys.geminiEnvDisplay = DEFAULT_SETTINGS.apiKeys.geminiEnvDisplay;
@@ -261,6 +303,20 @@ const App: React.FC = () => {
     try {
       const analysis = await analyzeDailyIntake(userProfile, log);
       setDailyMealAnalysis(analysis);
+
+      // Create patient case for nutritionist review
+      const patientCase: PatientCase = {
+        id: `CASE_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        patientEmail: user?.email || 'anonymous@nutreeai.com',
+        userProfile: userProfile,
+        dailyFoodLog: log,
+        aiAnalysis: analysis,
+        createdAt: new Date().toISOString(),
+        status: 'submitted',
+        priority: 'normal'
+      };
+
+      setCurrentPatientCase(patientCase);
     } catch (err) {
       handleApiError(err);
     } finally {
@@ -369,13 +425,23 @@ const App: React.FC = () => {
     );
   }
 
+  // Show nutritionist dashboard if logged in as nutritionist
+  if (userRole === 'nutritionist' && nutritionist) {
+    return <NutritionistDashboard nutritionist={nutritionist} onLogout={handleNutritionistLogout} />;
+  }
+
+  // Show nutritionist login page
+  if (showNutritionistLogin) {
+    return <NutritionistLogin onLogin={handleNutritionistLogin} onBackToPatient={handleBackToPatientPortal} />;
+  }
+
   // Show landing page first
   if (showLandingPage) {
     return (
       <div className="min-h-screen flex flex-col bg-gradient-to-br from-green-400 via-teal-400 to-blue-500">
         <Header clinicName={appSettings.clinicName} onToggleSettings={() => setShowSettingsPanel(true)} userEmail={user?.email} onLogout={handleLogoutClick} />
         <main className="flex-grow">
-          <LandingPage onGetStarted={handleGetStarted} />
+          <LandingPage onGetStarted={handleGetStarted} onNutritionistLogin={handleSwitchToNutritionistLogin} />
         </main>
         <Footer />
       </div>
@@ -470,6 +536,11 @@ const App: React.FC = () => {
                     <>
                       {!dailyMealAnalysis ? (
                         <DailyMealInput onSubmit={handleDailyLogSubmit} isLoading={isLoading} profileSet={!!userProfile} />
+                      ) : currentPatientCase ? (
+                        <PatientStatusTracker
+                          patientCase={currentPatientCase}
+                          onViewReport={currentPatientCase.status === 'reviewed' ? handleViewProfessionalReport : undefined}
+                        />
                       ) : (
                          <DailyMealSummaryDisplay analysis={dailyMealAnalysis} />
                       )}
@@ -520,6 +591,18 @@ const App: React.FC = () => {
         </div>
       </main>
       <Footer />
+
+      {/* Professional Report Modal */}
+      {showProfessionalReport && currentPatientCase && (
+        <ProfessionalReport
+          patientCase={currentPatientCase}
+          onClose={handleCloseProfessionalReport}
+          onDownloadPDF={() => {
+            // TODO: Implement PDF download functionality
+            alert('PDF download functionality will be implemented');
+          }}
+        />
+      )}
     </div>
   );
 };

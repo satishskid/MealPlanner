@@ -32,6 +32,7 @@ export interface GroundingMetadata {
 
 // New types for Daily Meal Planner
 export type AppMode = 'singleChecker' | 'dailyPlanner';
+export type UserRole = 'patient' | 'nutritionist';
 
 export interface UserProfile {
   ageGroup: string;
@@ -139,4 +140,56 @@ export interface AppSettings {
     alt2: string;
   };
   mcpServerUrl: string;
+}
+
+// Nutritionist-specific types
+export interface NutritionistProfile {
+  id: string;
+  name: string;
+  credentials: string; // e.g., "RD, MS", "PhD in Nutrition"
+  specialization: string; // e.g., "Clinical Nutrition", "Sports Nutrition"
+  licenseNumber?: string;
+  yearsOfExperience: number;
+}
+
+export interface NutritionistReview {
+  nutritionistId: string;
+  nutritionistName: string;
+  reviewDate: string;
+  professionalNotes: string;
+  recommendations: string;
+  approvalStatus: 'approved' | 'modified' | 'needs_revision';
+  modifiedAnalysis?: Partial<DailyMealAnalysis>;
+}
+
+export interface PatientCase {
+  id: string;
+  patientEmail: string;
+  patientName?: string;
+  organizationId?: string; // For bulk uploads
+  userProfile: UserProfile;
+  dailyFoodLog: DailyFoodLog;
+  aiAnalysis: DailyMealAnalysis;
+  nutritionistReview?: NutritionistReview;
+  createdAt: string;
+  reviewedAt?: string;
+  status: 'submitted' | 'under_review' | 'reviewed' | 'delivered';
+  priority: 'normal' | 'urgent';
+}
+
+export interface BulkUploadData {
+  organizationName: string;
+  contactEmail: string;
+  uploadDate: string;
+  totalCases: number;
+  processedCases: number;
+  cases: PatientCase[];
+}
+
+export interface PatientStatus {
+  caseId: string;
+  status: 'submitted' | 'under_review' | 'reviewed' | 'delivered';
+  submittedAt: string;
+  estimatedReviewTime?: string;
+  nutritionistAssigned?: string;
 }

@@ -8,9 +8,9 @@ const Footer: React.FC = () => {
       {/* Happy Customers Section */}
       <div className="mb-6">
         <h3 className="text-sm text-white opacity-75 mb-3 font-medium">Trusted by our partners</h3>
-        <div className="flex items-center justify-center gap-6 opacity-60 hover:opacity-80 transition-opacity">
-          <img src="/images/santaan.png" alt="Santaan - Trusted Partner" className="h-8 w-auto object-contain filter brightness-0 invert" />
-          <img src="/images/skids.png" alt="Skids - Trusted Partner" className="h-10 w-auto object-contain filter brightness-0 invert" />
+        <div className="flex items-center justify-center gap-6 opacity-70 hover:opacity-90 transition-opacity bg-white/10 backdrop-blur-sm rounded-lg p-4">
+          <img src="/images/santaan.png" alt="Santaan - Trusted Partner" className="h-8 w-auto object-contain" />
+          <img src="/images/skids.png" alt="Skids - Trusted Partner" className="h-10 w-auto object-contain" />
         </div>
       </div>
 
