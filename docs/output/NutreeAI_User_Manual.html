@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="NutreeAI Support Team" />
+  <meta name="dcterms.date" content="2024-01-01" />
+  <title>NutreeAI User Manual</title>
+  <style>
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">NutreeAI User Manual</h1>
+<p class="subtitle">Complete Guide to AI-Powered Nutrition Analysis
+Platform</p>
+<p class="author">NutreeAI Support Team</p>
+<p class="date">2024</p>
+</header>
+<h1 id="nutreeai-user-manual">NutreeAI User Manual</h1>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol type="1">
+<li><a href="#getting-started">Getting Started</a></li>
+<li><a href="#patient-portal-guide">Patient Portal Guide</a></li>
+<li><a href="#nutritionist-dashboard">Nutritionist Dashboard</a></li>
+<li><a href="#organization-management">Organization Management</a></li>
+<li><a href="#admin-controls">Admin Controls</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+<li><a href="#support--contact">Support &amp; Contact</a></li>
+</ol>
+<hr />
+<h2 id="getting-started">Getting Started</h2>
+<h3 id="what-is-nutreeai">What is NutreeAI?</h3>
+<p>NutreeAI is an AI-powered nutrition analysis platform that combines
+artificial intelligence with professional nutritionist oversight to
+provide accurate, culturally intelligent nutrition recommendations.</p>
+<h3 id="who-can-use-nutreeai">Who Can Use NutreeAI?</h3>
+<ul>
+<li><strong>Patients</strong>: Individuals seeking nutrition analysis
+through their healthcare provider</li>
+<li><strong>Nutritionists</strong>: Certified professionals reviewing
+and validating AI analysis</li>
+<li><strong>Organizations</strong>: Healthcare providers, schools, and
+corporate wellness programs</li>
+<li><strong>Administrators</strong>: Platform managers overseeing system
+operations</li>
+</ul>
+<h3 id="system-requirements">System Requirements</h3>
+<ul>
+<li><strong>Web Browser</strong>: Chrome 90+, Firefox 88+, Safari 14+,
+Edge 90+</li>
+<li><strong>Internet Connection</strong>: Broadband recommended for
+optimal performance</li>
+<li><strong>Device</strong>: Desktop, tablet, or mobile device</li>
+<li><strong>JavaScript</strong>: Must be enabled</li>
+</ul>
+<hr />
+<h2 id="patient-portal-guide">Patient Portal Guide</h2>
+<h3 id="accessing-your-organizations-portal">1. Accessing Your
+Organization’s Portal</h3>
+<h4 id="direct-access">Direct Access</h4>
+<ul>
+<li>Visit your organization’s custom portal (e.g.,
+<code>clinic-name.nutreeai.com</code>)</li>
+<li>Look for the nutrition services link on your provider’s website</li>
+<li>Use the direct link provided by your healthcare provider</li>
+</ul>
+<h4 id="what-youll-see">What You’ll See</h4>
+<ul>
+<li>Your organization’s branding and logo</li>
+<li>Welcome message customized for your provider</li>
+<li>“Start Your Nutrition Journey” button</li>
+</ul>
+<h3 id="creating-your-profile">2. Creating Your Profile</h3>
+<h4 id="step-1-personal-information">Step 1: Personal Information</h4>
+<ol type="1">
+<li>Click “Start Your Nutrition Journey”</li>
+<li>Select your age group from the dropdown:
+<ul>
+<li>Child (5-12)</li>
+<li>Teen (13-19)</li>
+<li>Young Adult (20-29)</li>
+<li>Adult (30-49)</li>
+<li>Middle-aged (50-64)</li>
+<li>Senior (65+)</li>
+</ul></li>
+</ol>
+<h4 id="step-2-cuisine-preferences">Step 2: Cuisine Preferences</h4>
+<ol type="1">
+<li>Choose your primary cuisine preference:
+<ul>
+<li>North Indian, South Indian, Punjabi</li>
+<li>Bengali, Gujarati, Maharashtrian</li>
+<li>Continental, Mediterranean, Chinese</li>
+<li>Mexican, Vegan, Vegetarian, Keto</li>
+<li>Other (specify)</li>
+</ul></li>
+</ol>
+<h4 id="step-3-consent-if-required">Step 3: Consent (if required)</h4>
+<ul>
+<li>Read and accept the consent form for nutrition analysis</li>
+<li>Understand that analysis is for informational purposes only</li>
+</ul>
+<h3 id="food-log-entry">3. Food Log Entry</h3>
+<h4 id="simple-mode-recommended-for-beginners">Simple Mode (Recommended
+for Beginners)</h4>
+<ol type="1">
+<li>Enter your meals in plain text:
+<ul>
+<li><strong>Breakfast</strong>: “Oats with milk and banana”</li>
+<li><strong>Lunch</strong>: “Rice, dal, and vegetables”</li>
+<li><strong>Dinner</strong>: “Roti with chicken curry”</li>
+<li><strong>Snacks</strong>: “Tea with biscuits”</li>
+</ul></li>
+</ol>
+<h4 id="advanced-mode-for-detailed-analysis">Advanced Mode (For Detailed
+Analysis)</h4>
+<ol type="1">
+<li>Click “Advanced Options” for any meal</li>
+<li>Use logical operators for complex entries:</li>
+</ol>
+<h5 id="or-operator-food-alternatives">OR Operator (Food
+Alternatives)</h5>
+<ul>
+<li>Use when you eat different foods on different days</li>
+<li>Example: “Eggs OR Oats OR Paratha”</li>
+<li>Click “+ OR” to add alternatives</li>
+</ul>
+<h5 id="and-operator-food-combinations">AND Operator (Food
+Combinations)</h5>
+<ul>
+<li>Use when you eat multiple items together</li>
+<li>Example: “Rice AND Dal AND Vegetables”</li>
+<li>Click “+ AND” to add combinations</li>
+</ul>
+<h5 id="mixed-logic">Mixed Logic</h5>
+<ul>
+<li>Combine OR and AND for complex meals</li>
+<li>Example: “Rice AND Dal OR Roti AND Sabzi”</li>
+</ul>
+<h4 id="tips-for-better-analysis">Tips for Better Analysis</h4>
+<ul>
+<li>Be specific about cooking methods (fried, boiled, grilled)</li>
+<li>Include approximate quantities when possible</li>
+<li>Mention any special ingredients or preparations</li>
+<li>Use your local food names - our AI understands cultural terms</li>
+</ul>
+<h3 id="tracking-your-analysis">4. Tracking Your Analysis</h3>
+<h4 id="status-updates">Status Updates</h4>
+<p>After submitting your food log, you’ll see real-time status
+updates:</p>
+<ol type="1">
+<li><strong>Submitted</strong> ✅
+<ul>
+<li>Your food log has been received</li>
+<li>AI analysis is being generated</li>
+</ul></li>
+<li><strong>Under Review</strong> 🔍
+<ul>
+<li>AI analysis complete</li>
+<li>Assigned to a certified nutritionist</li>
+<li>Professional review in progress</li>
+</ul></li>
+<li><strong>Reviewed</strong> ✅
+<ul>
+<li>Nutritionist has validated and enhanced the analysis</li>
+<li>Professional report is ready</li>
+</ul></li>
+<li><strong>Delivered</strong> 📧
+<ul>
+<li>Complete report available for viewing</li>
+<li>Email notification sent (if enabled)</li>
+</ul></li>
+</ol>
+<h4 id="estimated-timeline">Estimated Timeline</h4>
+<ul>
+<li><strong>AI Analysis</strong>: Instant (&lt; 30 seconds)</li>
+<li><strong>Professional Review</strong>: 2-24 hours (depending on
+organization settings)</li>
+<li><strong>Total Time</strong>: Usually within 24 hours</li>
+</ul>
+<h3 id="understanding-your-report">5. Understanding Your Report</h3>
+<h4 id="report-sections">Report Sections</h4>
+<h5 id="patient-information">1. Patient Information</h5>
+<ul>
+<li>Your profile details</li>
+<li>Submission and review dates</li>
+<li>Case ID for reference</li>
+</ul>
+<h5 id="daily-food-log">2. Daily Food Log</h5>
+<ul>
+<li>Complete record of your submitted meals</li>
+<li>Shows OR/AND combinations clearly</li>
+<li>Organized by meal type</li>
+</ul>
+<h5 id="ai-nutritional-analysis">3. AI Nutritional Analysis</h5>
+<ul>
+<li><strong>Total Estimated Calories</strong>: Daily calorie range</li>
+<li><strong>Quality Assessment</strong>: Overall diet evaluation</li>
+<li><strong>Meal Breakdown</strong>: Individual meal analysis with:
+<ul>
+<li>Estimated calories per meal</li>
+<li>Nutritional highlights</li>
+<li>Specific observations</li>
+</ul></li>
+</ul>
+<h5 id="professional-review">4. Professional Review</h5>
+<ul>
+<li><strong>Reviewed by</strong>: Nutritionist name and credentials</li>
+<li><strong>Professional Notes</strong>: Expert observations and
+insights</li>
+<li><strong>Modified Recommendations</strong>: Enhanced AI
+suggestions</li>
+</ul>
+<h5 id="recommendations">5. Recommendations</h5>
+<ul>
+<li><strong>General Recommendations</strong>: Dietary improvement
+suggestions</li>
+<li><strong>Cultural Insights</strong>: Culturally appropriate
+motivational messages</li>
+<li><strong>Educational Tips</strong>: Practical nutrition
+education</li>
+</ul>
+<h4 id="professional-modifications">Professional Modifications</h4>
+<p>Look for “✓ Professionally Modified” indicators showing where the
+nutritionist enhanced the AI analysis.</p>
+<h3 id="downloading-your-report">6. Downloading Your Report</h3>
+<ol type="1">
+<li>Click the “Download PDF” button in your report</li>
+<li>Save the file to your device</li>
+<li>Share with your healthcare provider if needed</li>
+<li>Keep for your personal health records</li>
+</ol>
+<hr />
+<h2 id="nutritionist-dashboard">Nutritionist Dashboard</h2>
+<h3 id="logging-in">1. Logging In</h3>
+<h4 id="access-methods">Access Methods</h4>
+<ul>
+<li>Direct login at your organization’s nutritionist portal</li>
+<li>Use credentials provided by your organization administrator</li>
+<li>Enter your professional access code for verification</li>
+</ul>
+<h4 id="demo-credentials-for-testing">Demo Credentials (for
+testing)</h4>
+<ul>
+<li><strong>Email</strong>: nutritionist@nutreeai.com</li>
+<li><strong>Password</strong>: nutree2024</li>
+<li><strong>Access Code</strong>: NUTREE_PRO</li>
+</ul>
+<h3 id="dashboard-overview">2. Dashboard Overview</h3>
+<h4 id="main-sections">Main Sections</h4>
+<ul>
+<li><strong>Pending Cases</strong>: New cases awaiting review</li>
+<li><strong>In Progress</strong>: Cases currently being reviewed</li>
+<li><strong>Completed</strong>: Recently completed cases</li>
+<li><strong>Performance Metrics</strong>: Your review statistics</li>
+</ul>
+<h4 id="case-information-display">Case Information Display</h4>
+<p>Each case shows: - Patient demographics (age group, cuisine
+preference) - Submission date and priority level - Estimated review time
+- Case complexity indicators</p>
+<h3 id="reviewing-cases">3. Reviewing Cases</h3>
+<h4 id="step-1-select-a-case">Step 1: Select a Case</h4>
+<ol type="1">
+<li>Click on a pending case from your dashboard</li>
+<li>Review the case priority and estimated complexity</li>
+<li>Click “Start Review” to begin analysis</li>
+</ol>
+<h4 id="step-2-review-ai-analysis">Step 2: Review AI Analysis</h4>
+<p>The system displays complete AI analysis including: - <strong>Total
+Calorie Estimate</strong>: AI-generated calorie range - <strong>Quality
+Assessment</strong>: Overall diet evaluation - <strong>Detailed Meal
+Breakdown</strong>: Per-meal analysis with: - Food items identified -
+Calorie estimates - Nutritional observations - Cultural context
+notes</p>
+<h4 id="step-3-professional-enhancement">Step 3: Professional
+Enhancement</h4>
+<p>You can modify any aspect of the AI analysis:</p>
+<h5 id="editable-fields">Editable Fields</h5>
+<ul>
+<li><strong>Quality Assessment</strong>: Modify overall diet
+evaluation</li>
+<li><strong>General Recommendations</strong>: Enhance dietary
+advice</li>
+<li><strong>Motivational Message</strong>: Personalize
+encouragement</li>
+<li><strong>Educational Tip</strong>: Add professional insights</li>
+</ul>
+<h5 id="best-practices">Best Practices</h5>
+<ul>
+<li>Respect cultural food preferences</li>
+<li>Provide actionable, specific advice</li>
+<li>Use encouraging, non-judgmental language</li>
+<li>Include practical implementation tips</li>
+</ul>
+<h4 id="step-4-add-professional-notes">Step 4: Add Professional
+Notes</h4>
+<ul>
+<li>Document your professional observations</li>
+<li>Note any concerns or red flags</li>
+<li>Provide context for your modifications</li>
+<li>Include follow-up recommendations if needed</li>
+</ul>
+<h4 id="step-5-submit-review">Step 5: Submit Review</h4>
+<ol type="1">
+<li>Review all your modifications</li>
+<li>Add digital signature (automatic with credentials)</li>
+<li>Click “Submit Professional Review”</li>
+<li>Case moves to “Completed” status</li>
+</ol>
+<h3 id="case-management">4. Case Management</h3>
+<h4 id="filtering-and-search">Filtering and Search</h4>
+<ul>
+<li>Filter by priority level (urgent, high, normal, low)</li>
+<li>Search by patient demographics</li>
+<li>Sort by submission date or complexity</li>
+<li>View cases by status</li>
+</ul>
+<h4 id="workload-management">Workload Management</h4>
+<ul>
+<li>Monitor your daily case capacity</li>
+<li>Track average review time</li>
+<li>View performance metrics</li>
+<li>Manage availability status</li>
+</ul>
+<h3 id="professional-tools">5. Professional Tools</h3>
+<h4 id="cultural-intelligence-database">Cultural Intelligence
+Database</h4>
+<ul>
+<li>Access cultural food information</li>
+<li>Understand regional cuisine variations</li>
+<li>Get context for unfamiliar food items</li>
+<li>Learn about traditional cooking methods</li>
+</ul>
+<h4 id="nutrition-reference">Nutrition Reference</h4>
+<ul>
+<li>Quick access to nutritional databases</li>
+<li>Calorie and macro information</li>
+<li>Dietary guideline references</li>
+<li>Special diet considerations</li>
+</ul>
+<hr />
+<h2 id="organization-management">Organization Management</h2>
+<h3 id="organization-registration">1. Organization Registration</h3>
+<h4 id="step-1-basic-information">Step 1: Basic Information</h4>
+<ol type="1">
+<li>Visit the main NutreeAI website</li>
+<li>Click “Become a Partner”</li>
+<li>Fill out organization details:
+<ul>
+<li>Organization name</li>
+<li>Type (clinic, hospital, school, corporate)</li>
+<li>Contact information</li>
+<li>Desired subdomain</li>
+</ul></li>
+</ol>
+<h4 id="step-2-service-configuration">Step 2: Service Configuration</h4>
+<ol type="1">
+<li>Choose nutritionist assignment model:
+<ul>
+<li><strong>NutreeAI-Provided</strong>: Use our certified
+nutritionists</li>
+<li><strong>In-House</strong>: Use your existing nutritionist staff</li>
+<li><strong>Hybrid</strong>: Combination of both models</li>
+</ul></li>
+<li>Set capacity and preferences:
+<ul>
+<li>Maximum patients per month</li>
+<li>Escalation threshold hours</li>
+<li>Enable bulk uploads (if needed)</li>
+<li>Custom report requirements</li>
+</ul></li>
+</ol>
+<h4 id="step-3-billing-setup">Step 3: Billing Setup</h4>
+<ol type="1">
+<li>Select billing model:
+<ul>
+<li><strong>Per-Case</strong>: $25 per analysis</li>
+<li><strong>Monthly Subscription</strong>: Fixed monthly fee</li>
+<li><strong>Annual Contract</strong>: Volume discounts</li>
+<li><strong>Custom Enterprise</strong>: Tailored pricing</li>
+</ul></li>
+<li>Provide billing contact information</li>
+<li>Review and submit registration</li>
+</ol>
+<h3 id="organization-portal-customization">2. Organization Portal
+Customization</h3>
+<h4 id="branding-options">Branding Options</h4>
+<ul>
+<li>Upload organization logo</li>
+<li>Choose primary and accent colors</li>
+<li>Customize welcome message</li>
+<li>Add footer text and contact information</li>
+</ul>
+<h4 id="feature-configuration">Feature Configuration</h4>
+<ul>
+<li>Enable/disable advanced food input</li>
+<li>Set patient consent requirements</li>
+<li>Configure notification preferences</li>
+<li>Customize report templates</li>
+</ul>
+<h4 id="domain-setup">Domain Setup</h4>
+<ul>
+<li>Use provided subdomain (organization-name.nutreeai.com)</li>
+<li>Configure custom domain (optional)</li>
+<li>Set up SSL certificates</li>
+<li>Test portal functionality</li>
+</ul>
+<h3 id="managing-in-house-nutritionists">3. Managing In-House
+Nutritionists</h3>
+<h4 id="adding-nutritionists">Adding Nutritionists</h4>
+<ol type="1">
+<li>Access organization admin panel</li>
+<li>Click “Add Nutritionist”</li>
+<li>Enter nutritionist details:
+<ul>
+<li>Name and credentials</li>
+<li>License number</li>
+<li>Specializations</li>
+<li>Working hours and capacity</li>
+</ul></li>
+</ol>
+<h4 id="nutritionist-performance">Nutritionist Performance</h4>
+<ul>
+<li>Monitor case completion rates</li>
+<li>Track average review times</li>
+<li>View patient satisfaction scores</li>
+<li>Manage workload distribution</li>
+</ul>
+<h3 id="analytics-and-reporting">4. Analytics and Reporting</h3>
+<h4 id="usage-metrics">Usage Metrics</h4>
+<ul>
+<li>Total cases processed</li>
+<li>Monthly case volume</li>
+<li>Capacity utilization</li>
+<li>Cost per case analysis</li>
+</ul>
+<h4 id="performance-indicators">Performance Indicators</h4>
+<ul>
+<li>Average review time</li>
+<li>Patient satisfaction scores</li>
+<li>Nutritionist utilization rates</li>
+<li>Quality metrics</li>
+</ul>
+<h4 id="financial-reporting">Financial Reporting</h4>
+<ul>
+<li>Monthly billing summaries</li>
+<li>Cost analysis and ROI</li>
+<li>Usage forecasting</li>
+<li>Budget planning tools</li>
+</ul>
+<hr />
+<h2 id="admin-controls">Admin Controls</h2>
+<h3 id="super-admin-access">1. Super Admin Access</h3>
+<h4 id="accessing-admin-portal">Accessing Admin Portal</h4>
+<ul>
+<li>Use discrete “System Admin” link on main page</li>
+<li>Or visit: nutreeai.com?admin=true</li>
+<li>Enter admin credentials with MFA</li>
+</ul>
+<h4 id="demo-admin-credentials">Demo Admin Credentials</h4>
+<ul>
+<li><strong>Super Admin</strong>: admin@nutreeai.com / admin2024 / MFA:
+123456</li>
+<li><strong>Manager</strong>: manager@nutreeai.com / manager2024 / MFA:
+123456</li>
+</ul>
+<h3 id="platform-management">2. Platform Management</h3>
+<h4 id="organization-oversight">Organization Oversight</h4>
+<ul>
+<li>View all registered organizations</li>
+<li>Monitor usage and performance</li>
+<li>Manage organization status (active/inactive)</li>
+<li>Handle billing and contracts</li>
+</ul>
+<h4 id="nutritionist-network">Nutritionist Network</h4>
+<ul>
+<li>Manage NutreeAI-provided nutritionists</li>
+<li>Monitor performance across organizations</li>
+<li>Handle capacity and assignment optimization</li>
+<li>Manage professional credentials</li>
+</ul>
+<h4 id="system-analytics">System Analytics</h4>
+<ul>
+<li>Platform-wide performance metrics</li>
+<li>Revenue tracking and forecasting</li>
+<li>User engagement analytics</li>
+<li>System health monitoring</li>
+</ul>
+<h3 id="assignment-management">3. Assignment Management</h3>
+<h4 id="intelligent-assignment-system">Intelligent Assignment
+System</h4>
+<p>The platform automatically assigns cases based on: - Nutritionist
+specialization match - Current workload and availability - Cultural
+expertise alignment - Performance ratings - Priority level
+requirements</p>
+<h4 id="manual-override">Manual Override</h4>
+<ul>
+<li>Review assignment recommendations</li>
+<li>Manually assign cases when needed</li>
+<li>View assignment scoring and reasoning</li>
+<li>Handle escalations and special cases</li>
+</ul>
+<hr />
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="common-issues">Common Issues</h3>
+<h4 id="login-problems">Login Problems</h4>
+<p><strong>Issue</strong>: Cannot access portal
+<strong>Solutions</strong>: - Check internet connection - Clear browser
+cache and cookies - Try incognito/private browsing mode - Verify correct
+portal URL - Contact your organization administrator</p>
+<h4 id="food-log-submission-errors">Food Log Submission Errors</h4>
+<p><strong>Issue</strong>: Cannot submit food log
+<strong>Solutions</strong>: - Ensure all required fields are completed -
+Check for special characters in text - Try simple mode instead of
+advanced - Refresh page and try again - Contact support if problem
+persists</p>
+<h4 id="report-not-loading">Report Not Loading</h4>
+<p><strong>Issue</strong>: Professional report not displaying
+<strong>Solutions</strong>: - Wait for review completion (check status)
+- Refresh the page - Try different browser - Check if popup blockers are
+enabled - Contact support with case ID</p>
+<h4 id="pdf-download-issues">PDF Download Issues</h4>
+<p><strong>Issue</strong>: Cannot download PDF report
+<strong>Solutions</strong>: - Ensure popup blockers are disabled - Try
+right-click “Save As” - Check browser download settings - Try different
+browser - Contact support for manual report delivery</p>
+<h3 id="browser-compatibility">Browser Compatibility</h3>
+<h4 id="supported-browsers">Supported Browsers</h4>
+<ul>
+<li>✅ Chrome 90+ (Recommended)</li>
+<li>✅ Firefox 88+</li>
+<li>✅ Safari 14+</li>
+<li>✅ Edge 90+</li>
+</ul>
+<h4 id="unsupported-browsers">Unsupported Browsers</h4>
+<ul>
+<li>❌ Internet Explorer (any version)</li>
+<li>❌ Chrome &lt; 90</li>
+<li>❌ Firefox &lt; 88</li>
+<li>❌ Safari &lt; 14</li>
+</ul>
+<h3 id="performance-optimization">Performance Optimization</h3>
+<h4 id="for-best-performance">For Best Performance</h4>
+<ul>
+<li>Use latest browser version</li>
+<li>Enable JavaScript</li>
+<li>Disable unnecessary browser extensions</li>
+<li>Ensure stable internet connection</li>
+<li>Clear cache periodically</li>
+</ul>
+<hr />
+<h2 id="support-contact">Support &amp; Contact</h2>
+<h3 id="getting-help">Getting Help</h3>
+<h4 id="self-service-resources">Self-Service Resources</h4>
+<ul>
+<li><strong>User Manual</strong>: This comprehensive guide</li>
+<li><strong>FAQ</strong>: Frequently asked questions</li>
+<li><strong>Video Tutorials</strong>: Step-by-step guides</li>
+<li><strong>Knowledge Base</strong>: Searchable help articles</li>
+</ul>
+<h4 id="contact-support">Contact Support</h4>
+<ul>
+<li><strong>Email</strong>: support@nutreeai.com</li>
+<li><strong>Response Time</strong>: Within 4 hours for critical
+issues</li>
+<li><strong>Business Hours</strong>: Monday-Friday, 9 AM - 6 PM EST</li>
+<li><strong>Emergency</strong>: Critical system issues only</li>
+</ul>
+<h4 id="organization-specific-support">Organization-Specific
+Support</h4>
+<ul>
+<li>Contact your organization administrator first</li>
+<li>They can help with account-specific issues</li>
+<li>Escalate to NutreeAI support if needed</li>
+</ul>
+<h3 id="feedback-and-suggestions">Feedback and Suggestions</h3>
+<h4 id="we-value-your-input">We Value Your Input</h4>
+<ul>
+<li><strong>Feature Requests</strong>: feedback@nutreeai.com</li>
+<li><strong>Bug Reports</strong>: bugs@nutreeai.com</li>
+<li><strong>General Feedback</strong>: hello@nutreeai.com</li>
+</ul>
+<h4 id="improvement-process">Improvement Process</h4>
+<ol type="1">
+<li>Submit feedback through appropriate channel</li>
+<li>Our team reviews all suggestions</li>
+<li>Popular requests are prioritized for development</li>
+<li>Updates are communicated through release notes</li>
+</ol>
+<hr />
+<h2 id="appendix">Appendix</h2>
+<h3 id="glossary-of-terms">Glossary of Terms</h3>
+<ul>
+<li><strong>AI Analysis</strong>: Automated nutrition assessment using
+artificial intelligence</li>
+<li><strong>Professional Review</strong>: Validation and enhancement by
+certified nutritionist</li>
+<li><strong>White-Label</strong>: Customized branding for
+organization-specific portals</li>
+<li><strong>Case</strong>: Individual nutrition analysis request from
+patient to completion</li>
+<li><strong>Assignment Model</strong>: Method for connecting patients
+with nutritionists</li>
+</ul>
+<h3 id="keyboard-shortcuts">Keyboard Shortcuts</h3>
+<ul>
+<li><strong>Ctrl/Cmd + S</strong>: Save current form (where
+applicable)</li>
+<li><strong>Ctrl/Cmd + P</strong>: Print current page</li>
+<li><strong>Ctrl/Cmd + F</strong>: Search within page</li>
+<li><strong>Tab</strong>: Navigate between form fields</li>
+<li><strong>Enter</strong>: Submit forms</li>
+</ul>
+<h3 id="data-privacy-and-security">Data Privacy and Security</h3>
+<h4 id="your-data-is-protected">Your Data is Protected</h4>
+<ul>
+<li>All data encrypted in transit and at rest</li>
+<li>HIPAA-compliant data handling</li>
+<li>No data shared without consent</li>
+<li>Regular security audits and updates</li>
+</ul>
+<h4 id="data-retention">Data Retention</h4>
+<ul>
+<li>Patient data retained per organization policy</li>
+<li>Typically 7 years for healthcare compliance</li>
+<li>Data deletion available upon request</li>
+<li>Audit logs maintained for compliance</li>
+</ul>
+<hr />
+<p><em>This manual is regularly updated. For the latest version, visit:
+docs.nutreeai.com</em></p>
+<p><strong>NutreeAI Support Team</strong><br />
+<em>Making nutrition analysis accessible, accurate, and culturally
+intelligent</em></p>
+</body>
+</html>
