@@ -188,7 +188,14 @@ const App: React.FC = () => {
     }
   }, [user, error, apiKeyStatus]); // Re-run if user, error, or apiKeyStatus changes
 
-
+  // Check for admin URL parameter
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('admin') === 'true' || window.location.pathname === '/admin') {
+      setShowAdminLogin(true);
+      setShowLandingPage(false);
+    }
+  }, []);
 
   const openAuthModal = () => {
     netlifyIdentity.open(); // Opens the Netlify Identity modal for login/signup

@@ -34,14 +34,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onNutritionistL
               Professional Login
             </button>
           )}
-          {onAdminLogin && (
-            <button
-              onClick={onAdminLogin}
-              className="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold text-sm hover:bg-red-700 transition-colors shadow-lg border-2 border-white/20"
-            >
-              Admin Portal
-            </button>
-          )}
         </div>
       </div>
 
@@ -114,10 +106,23 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onNutritionistL
       <div className="text-center bg-gradient-to-r from-yellow-300/20 to-orange-300/20 rounded-xl p-8 text-white">
         <h2 className="text-2xl font-bold mb-4">Nutrition is Part of Life</h2>
         <p className="text-lg leading-relaxed max-w-3xl mx-auto">
-          It's not a fix, it's living itself. Understanding your food choices empowers you to make 
+          It's not a fix, it's living itself. Understanding your food choices empowers you to make
           informed decisions that support your health, respect your culture, and bring joy to your meals.
         </p>
       </div>
+
+      {/* Discrete Admin Access */}
+      {onAdminLogin && (
+        <div className="text-center mt-8">
+          <button
+            onClick={onAdminLogin}
+            className="text-white/40 hover:text-white/60 text-xs transition-colors duration-300"
+            title="System Administration"
+          >
+            System Admin
+          </button>
+        </div>
+      )}
     </div>
   );
 };
