@@ -5,9 +5,9 @@ export const GEMINI_MODEL_NAME = 'gemini-2.5-flash';
 export const API_KEY_CHECK_MSG = "Checking for API Key...";
 export const API_KEY_MISSING_MSG = "API_KEY environment variable is not set. Please configure it to use the app.";
 export const API_KEY_PRESENT_MSG = "API Key found. Ready to use.";
-export const APP_TITLE = "Santaan / Skids Diet Planner"; // Updated
+export const APP_TITLE = "nutreeai";
 export const POWERED_BY_AI = "powered by AI";
-export const DEVELOPER_CREDIT = "developed by greybrain.ai";
+export const DEVELOPER_CREDIT = "made by greybrain.ai";
 export const FOOTER_TEXT = `© ${new Date().getFullYear()} ${APP_TITLE}. ${POWERED_BY_AI}.`;
 
 

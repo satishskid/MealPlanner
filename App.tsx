@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import netlifyIdentity, { User } from 'netlify-identity-widget';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import LandingPage from './components/LandingPage';
 import FoodInput from './components/FoodInput';
 import CalorieDisplay from './components/CalorieDisplay';
 import LoadingSpinner from './components/LoadingSpinner';
@@ -46,10 +47,11 @@ interface SingleFoodSearchPayload {
 
 const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [showLandingPage, setShowLandingPage] = useState<boolean>(true);
   const [apiKeyStatus, setApiKeyStatus] = useState<string>(API_KEY_CHECK_MSG);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [appMode, setAppMode] = useState<AppMode>('dailyPlanner'); 
+  const [appMode, setAppMode] = useState<AppMode>('dailyPlanner');
 
   // State for Single Food Checker
   const [calorieData, setCalorieData] = useState<CalorieInfo | null>(null);
@@ -175,6 +177,10 @@ const App: React.FC = () => {
 
   const handleLogoutClick = () => {
     netlifyIdentity.logout();
+  };
+
+  const handleGetStarted = () => {
+    setShowLandingPage(false);
   };
 
   const handleSaveSettings = (newSettings: AppSettings) => {
@@ -358,6 +364,19 @@ const App: React.FC = () => {
             Login / Sign Up
           </button>
         </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Show landing page first
+  if (showLandingPage) {
+    return (
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-green-400 via-teal-400 to-blue-500">
+        <Header clinicName={appSettings.clinicName} onToggleSettings={() => setShowSettingsPanel(true)} userEmail={user?.email} onLogout={handleLogoutClick} />
+        <main className="flex-grow">
+          <LandingPage onGetStarted={handleGetStarted} />
+        </main>
         <Footer />
       </div>
     );
