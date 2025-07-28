@@ -122,51 +122,11 @@ const B2BLandingPage: React.FC<B2BLandingPageProps> = ({
         </div>
       </div>
 
-      {/* Pricing Preview */}
+      {/* Pricing Preview (Subtle CTA only, no pricing or plans) */}
       <section className="bg-white/20 backdrop-blur-sm rounded-2xl p-8 mb-16 mt-20 shadow-lg">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2" style={{color:'#1a1a1a'}}>Choose Your Plan</h2>
-          <p className="text-gray-700 text-base md:text-lg opacity-80">Start with our free trial, scale as you grow</p>
-        </div>
-        <div className="grid md:grid-cols-3 gap-6">
-          {/* Starter Plan */}
-          <div className="bg-white rounded-xl p-6 text-gray-800 border border-gray-100 shadow-sm flex flex-col">
-            <h3 className="text-lg font-bold mb-1">Starter</h3>
-            <div className="text-2xl font-bold text-green-600 mb-2">$99<span className="text-base font-normal text-gray-600">/month</span></div>
-            <ul className="space-y-1 text-sm mb-4">
-              <li>50 reports/month</li>
-              <li>Basic templates</li>
-              <li>Email support</li>
-            </ul>
-            <button className="mt-auto w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">Start Free Trial</button>
-          </div>
-          {/* Professional Plan */}
-          <div className="bg-gradient-to-br from-green-500 to-teal-600 rounded-xl p-6 text-white border-2 border-yellow-400 shadow-md flex flex-col scale-105">
-            <div className="flex justify-between items-start mb-1">
-              <h3 className="text-lg font-bold">Professional</h3>
-              <span className="bg-yellow-400 text-green-800 text-xs px-2 py-1 rounded-full font-semibold">Popular</span>
-            </div>
-            <div className="text-2xl font-bold mb-2">$299<span className="text-base font-normal opacity-80">/month</span></div>
-            <ul className="space-y-1 text-sm mb-4">
-              <li>200 reports/month</li>
-              <li>Custom branding</li>
-              <li>Batch processing</li>
-              <li>Priority support</li>
-            </ul>
-            <button className="mt-auto w-full bg-white text-green-600 py-2 rounded-lg hover:bg-gray-100 transition-colors font-semibold">Start Free Trial</button>
-          </div>
-          {/* Enterprise Plan */}
-          <div className="bg-white rounded-xl p-6 text-gray-800 border border-gray-100 shadow-sm flex flex-col">
-            <h3 className="text-lg font-bold mb-1">Enterprise</h3>
-            <div className="text-2xl font-bold text-green-600 mb-2">Custom</div>
-            <ul className="space-y-1 text-sm mb-4">
-              <li>Unlimited reports</li>
-              <li>API access</li>
-              <li>White-label solution</li>
-              <li>Dedicated support</li>
-            </ul>
-            <button className="mt-auto w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">Contact Sales</button>
-          </div>
+        <div className="text-center mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2" style={{color:'#1a1a1a'}}>Interested in NutreeAI?</h2>
+          <p className="text-gray-700 text-base md:text-lg opacity-80">Please <a href="#contact" className="text-green-700 underline hover:text-green-900">contact us</a> for pricing and plans tailored to your needs.</p>
         </div>
       </section>
 
