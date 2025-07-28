@@ -17,6 +17,7 @@ const ProviderRegistration: React.FC<ProviderRegistrationProps> = ({ onSuccess, 
   const [organizationName, setOrganizationName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,17 +70,41 @@ const ProviderRegistration: React.FC<ProviderRegistrationProps> = ({ onSuccess, 
   };
 
   return (
-    <div style={{ padding: 32, maxWidth: 400, margin: '0 auto' }}>
-      <h2>Provider Registration</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input type="text" placeholder="First Name" value={firstName} onChange={e => setFirstName(e.target.value)} required className="w-full p-2 border rounded" />
-        <input type="text" placeholder="Last Name" value={lastName} onChange={e => setLastName(e.target.value)} required className="w-full p-2 border rounded" />
-        <input type="text" placeholder="Organization Name" value={organizationName} onChange={e => setOrganizationName(e.target.value)} required className="w-full p-2 border rounded" />
-        <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required className="w-full p-2 border rounded" />
-        <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required className="w-full p-2 border rounded" />
-        <button type="submit" disabled={isLoading} className="w-full bg-green-600 text-white py-2 rounded mt-2">{isLoading ? 'Registering...' : 'Register'}</button>
-        {error && <div className="text-red-600 mt-2">{error}</div>}
-      </form>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white shadow-md rounded-lg max-w-md w-full p-8">
+        <h2 className="text-2xl font-semibold text-center mb-6">Provider Registration</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">First Name</label>
+            <input type="text" placeholder="First Name" value={firstName} onChange={e => setFirstName(e.target.value)} required className="mt-1 block w-full p-2 border rounded-md shadow-sm focus:ring focus:ring-opacity-50" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Last Name</label>
+            <input type="text" placeholder="Last Name" value={lastName} onChange={e => setLastName(e.target.value)} required className="mt-1 block w-full p-2 border rounded-md shadow-sm focus:ring focus:ring-opacity-50" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Organization Name</label>
+            <input type="text" placeholder="Organization Name" value={organizationName} onChange={e => setOrganizationName(e.target.value)} required className="mt-1 block w-full p-2 border rounded-md shadow-sm focus:ring focus:ring-opacity-50" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Email</label>
+            <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required className="mt-1 block w-full p-2 border rounded-md shadow-sm focus:ring focus:ring-opacity-50" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Password</label>
+            <div className="flex items-center border rounded-md shadow-sm">
+              <input type={passwordVisible ? 'text' : 'password'} placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required className="mt-1 block w-full p-2 border-none rounded-md shadow-sm focus:ring focus:ring-opacity-50" />
+              <button type="button" onClick={() => setPasswordVisible(!passwordVisible)} className="p-2">
+                {passwordVisible ? 'Hide' : 'Show'}
+              </button>
+            </div>
+          </div>
+          <button type="submit" disabled={isLoading} className="w-full bg-green-600 text-white py-2 rounded-md shadow-md hover:bg-green-700 transition duration-200 ease-in-out">
+            {isLoading ? 'Registering...' : 'Register'}
+          </button>
+          {error && <div className="text-red-600 mt-2 text-sm text-center">{error}</div>}
+        </form>
+      </div>
     </div>
   );
 };
